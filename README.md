@@ -1,11 +1,7 @@
 # MistyI
 _A place to collaborate on skills, tools, wrappers, and any other enhancements for Misty I._
 
-To run these examples, make sure you have the Tools Directory in the same folder as the root skill folders. 
+## Structure
 
-## Examples
-
-1. __Roar__ - A basic skill that will roar like a lion when a person gets too close. 
-2. __Wander__ - A skill that enables Misty to roam about the environment without colliding with obstacles. 
-3. __Explore__ - A skill that intelligently determines where to explore and expand Misty's map. 
-
+1. __Example Skills__ - These are some examples skills for Misty 1
+2. __API Wrappers__ - These are a few choice wrappers for using Misty 1 with your favorite programming language. 
