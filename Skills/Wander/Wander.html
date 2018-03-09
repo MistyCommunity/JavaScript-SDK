@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../Tools/javascript/lightClient.js"></script>
+	<script src="../Tools/javascript/lightSocket.js"></script>
+
+	<!--  Example 'Wander' skill.
+			This skill uses the time-of-flight sensors on the robot to intelligently avoid obstacles.
+			If the way in front of the robot is clear, it will drive forward for a bit, then check again.
+			If the way is not clear, the robot will turn away from the closest object.
+			The low-level obstacle avoidance on the robot will stop the robot from colliding into anything.
+
+			Copyright 2018 Misty Robotics, Inc.
+
+			Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+			to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+			and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+			The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+			THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+			FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+			WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+		-->
+
+	<script type="text/javascript">
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		async function Wander() {
+			ip = $("#misty-robot-ip-address").val();
+
+			//Create client for commanding
+			var lightClient = new LightClient(ip, 10000);
+
+			//Create socket for listening to sensors
+			lightSocket = new LightSocket(ip);
+			lightSocket.Connect();
+			
+			//Wait for connection 
+			await sleep(5000); 
+
+			//Subscribe to WorldState to get objects and store them
+			lightSocket.Subscribe("Objects", "WorldState", 200, null, null, null, "Objects", function (data) { $('#ObjectList').val(data); });
+			
+			//Wait for data
+			await sleep(2000); 
+
+			//Take the first step
+			wanderStep(lightClient, lightSocket);
+		}
+
+		async function wanderStep(lightClient, lightSocket) {
+			if (document.getElementById('StopWander').checked == true) {
+				//Cleanup
+				document.getElementById('StopWander').checked = false;
+				lightClient.PostCommand("drive/stop");
+				lightSocket.Unsubscribe("Objects");
+				return;
+			}
+
+			//Wander pass 1 - Drive straight, but when you see an obstacle, turn away from it.
+			//NOTE: This implementation tends to get stuck in corners
+			lin = 50;
+			ang = 0;
+			ms = 2000;
+			mindist = 0.75;
+			var objectArray = $('#ObjectList').val();
+			for (var i = 0; i < objectArray.message.length; i++) {
+				wobj = objectArray.message[i];
+				if (wobj.location != null) { 
+					bearing = wobj.location.bearing;
+					distance = wobj.location.distance;
+					if (bearing > -Math.PI / 4 && bearing < Math.PI / 4 && distance < mindist && wobj.isSensible == true) {
+						mindist = distance;
+						ang = -Math.sign(bearing) * 50;
+						lin = 0;
+						ms = 500;
+					}
+				}
+			}
+
+			//The callback will trigger when driveTime finishes (or is terminated by collision avoidance), and cause the next step.  Recursion FTW!
+			lightClient.PostCommand("drive/time", " {\"LinearVelocity\":" + lin + ",\"AngularVelocity\":" + ang + ", \"TimeMs\":" + ms + "}", function () { wanderStep(lightClient, lightSocket); });
+		}
+	</script>
+
+</head>
+<body>
+	<div>
+		Misty's IP Address: <input id="misty-robot-ip-address" value="10.0.1.1">
+		<p></p>
+		<button onclick="Wander()">Wander</button>
+		<var id="ObjectList" value=" " />
+		<input type="checkbox" id="StopWander" />Stop
+	</div>
+</body>
+</html>

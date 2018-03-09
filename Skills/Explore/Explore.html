@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../Tools/javascript/lightClient.js"></script>
+	<script src="../Tools/javascript/lightSocket.js"></script>
+
+	<!--  Example 'Explore' skill.
+		This skill uses the robot's map-making ability to intelligently determine where to drive, to fill out the map.
+		Everything starts with a call to SlamStatus, to make sure the system is running properly.
+		If the robot has pose and a map, it will look for a location on the boundry between 'safe' and 'unknown' that is far enough away.
+		The robot then uses the built-in path-planning system to find an obstacle free path to the target and follow it.
+
+		Copyright 2018 Misty Robotics, Inc.
+
+		Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+		to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+		and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+		The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+		WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	-->
+
+	<script type="text/javascript">
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		async function Explore() {
+			ip = $("#misty-robot-ip-address").val();
+
+			//Create client for commanding motors
+			var lightClient = new LightClient(ip, 10000);
+
+			//Tell Misty to look slighly down to help with map generation. 
+			await sleep(1000);
+			lightClient.PostCommand("beta/head/move", "{ \"Pitch\": \"1\", \"Velocity\": \"10\" }");
+
+			//Create socket for listening to sensors
+			lightSocket = new LightSocket(ip);
+			lightSocket.Connect();
+			
+			//Wait for connection
+			await sleep(5000);
+
+			//Get the position & orientation.  Two calls to minimize piping back all of selfState.  
+
+			lightSocket.Subscribe("Position", "SelfState", 200, null, null, null, "Position", function (data) { $('#current-x-pose').val(data.message.x); $('#current-y-pose').val(data.message.y); $('#current-z-pose').val(data.message.z); });
+			
+			lightSocket.Subscribe("Orientation", "SelfState", 200, null, null, null, "Orientation", function (data) { $('#current-roll-pose').val(data.message.roll); $('#current-pitch-pose').val(data.message.pitch); $('#current-yaw-pose').val(data.message.yaw); });
+			
+			//And also get the computed grid position
+			lightSocket.Subscribe("GridCell", "SelfState", 200, null, null, null, "OccupancyGridCell", function (data) { $('#current-gridx-pose').val(data.message.x); $('#current-gridy-pose').val(data.message.y); });
+
+			await sleep(1000);
+			
+			//Start by checking status of SLAM system
+			lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+		}
+
+		async function slamStatusCallback(data, lightClient) {
+			if (document.getElementById('StopExplore').checked == true) {
+				document.getElementById('StopExplore').checked = false;
+
+				//Stop mapping
+				lightClient.PostCommand("alpha/slam/map/stop");
+				return;
+			}
+
+			sensorStatus = data[0].result.sensorStatus;
+			status = data[0].result.status;
+			runMode = data[0].result.runMode;
+
+			console.log("Got SLAM sensorstatus: " + sensorStatus + " status: " + status + "  runMode: " + runMode + "\n");
+
+			//Everything we care about is in status, which is a bitmap
+			uninit = status == 0;
+			initializing = status & 1;
+			ready = status & 2;
+			explore = status & 4;
+			tracking = status & 8;
+			recording = status & 16;
+			resetting = status & 32;
+			rebooting = status & 64;
+			haspose = status & 128;
+			lostpose = status & 256;
+			exporting = status & 512
+			error = status & 1024;
+			notconnect = status & 2048;
+			nopermission = status & 4096;
+			cantopen = status & 8192;
+			powerdown = status & 16384;
+
+			if (explore) { 
+				//All good, we're making a map!
+				if (haspose) {
+					console.log("Have pose, getting map\n");
+					lightClient.GetCommand("alpha/slam/map/raw", function (data) { slamMapCallback(data, lightClient) });
+					return;
+				}
+				if (lostpose) {
+					console.log("Lost my pose, should invert control\n");
+					await sleep(1000);
+					lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); });
+					return;
+				}
+				//Never pose situation
+				console.log("Have never had pose, wait or wiggle?\n");
+				await sleep(1000);
+				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); });
+				return;
+			}
+
+			if (ready || uninit) { 
+				//Start mapping, then come back here
+				console.log("Sensor ready, starting mapping\n");
+				lightClient.PostCommand("alpha/slam/map/start", {}, function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); }) });
+				return;
+			}
+
+			//Not ready yet, wait.
+			console.log("Sensor not ready - waiting and rechecking\n");
+			await sleep(1000);
+			lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+		}
+
+		async function slamMapCallback(data, lightClient) {
+			console.log("Got a map\n");
+
+			//Get the grid info
+			grid = data[0].result.grid;
+			grid.width = data[0].result.width;
+			grid.height = data[0].result.height;
+			grid.metersPerCell = data[0].result.metersPerCell;
+
+			//Grab the pose from the websocket return
+			robotLocation = new Object();
+			robotLocation.MistyX = parseFloat($("#current-x-pose").val());
+			robotLocation.MistyY = parseFloat($("#current-y-pose").val());
+			robotLocation.MistyYaw = parseFloat($("#current-yaw-pose").val());
+
+			//And in (Misty) grid coordinates
+			robotLocation.MistyGridX = parseFloat($("#current-gridx-pose").val());
+			robotLocation.MistyGridY = parseFloat($("#current-gridy-pose").val());
+
+			//If no map or no pose, wait a bit and try again (via status check)
+			if (grid == null || grid.length == 0 || isNaN(robotLocation.MistyX) || isNaN(robotLocation.MistyY) || isNaN(robotLocation.MistyGridX) || isNaN(robotLocation.MistyGridY) || isNaN(robotLocation.MistyYaw)) { 
+				//We know we have pose from status, but it may not have gotten here yet
+				console.log("Map or Pose empty, rechecking system\n");
+				await sleep(3000); //Might just need to wait a bit.  TODO - turn a tad
+				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+				return;
+			}
+
+			//Pick an location to go to.
+			//NOTE: this is a good place to add some randomness to ensure you won't give the same result if no path is possible.
+			point = new Object();
+			point.X = robotLocation.MistyGridX;
+			point.Y = robotLocation.MistyGridY;
+			console.log("Robot at " + point.X + " " + point.Y + "\n");
+
+			//First see if we're somewhere not known
+			if (grid[point.X][point.Y] != 1) {
+				//Display
+				ProcessMapData(grid, robotLocation);
+
+				//Just wander, trusting the ToFs
+				console.log("In the unknown, can't plan, wandering\n");
+				lightClient.PostCommand("drive/time", " {\"LinearVelocity\":" + 25 + ",\"AngularVelocity\":" + 0 + ", \"TimeMs\":" + 1000 + "}", function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
+				return;
+			}
+			else { 
+				console.log("I know where I am!");
+
+				//Start with where we are, search outwards for an unknown
+				toCheck = [point];
+
+				//Tag it so we don't re-search it
+				grid[point.X][point.Y] = -1; 
+				done = false;
+				while (!done && toCheck.length > 0) {
+					//This point is clear, check its neighbors
+					point = toCheck.shift();
+
+					for (x = -1; x <= 1; x++) {
+						for (y = -1; y <= 1; y++) {
+							if (done) {
+								break;
+							}
+							newPoint = new Object();
+							newPoint.X = (point.X + x);
+							newPoint.Y = (point.Y + y);
+							if (newPoint.X >= 0 && newPoint.X < grid.height &&
+								newPoint.Y >= 0 && newPoint.Y < grid.width) {
+								if (grid[newPoint.X][newPoint.Y] == 0) { 
+									//Found an unknown point!  Let's explore here!
+									if ((Math.abs(newPoint.X - robotLocation.MistyGridX) + Math.abs(newPoint.Y - robotLocation.MistyGridY)) * grid.metersPerCell > 0.75) { 
+										done = true;
+										break;
+									}
+								}
+								if (grid[newPoint.X][newPoint.Y] == 1) { 
+									//This is clear, search from it
+									toCheck.push(newPoint);
+									//Mark it so we don't re-visit
+									grid[newPoint.X][newPoint.Y] = -1;
+								}
+								//Obstacle and covered stop the search
+							}
+						}
+					}
+				}
+
+				//Display Map
+				grid[point.X][point.Y] = -2;
+				ProcessMapData(grid, robotLocation);
+
+				console.log("Exploring to " + point.X + " " + point.Y + "\n");
+
+				//point is the 'nearest' clear spot adjoining an unknown that is far enough away to see.
+				//Get a path
+				lightClient.GetCommand("alpha/slam/path?X=" + point.X + "&Y=" + point.Y, function (data) { slamPathCallback(data, lightClient) });
+			}
+		}
+
+		async function slamPathCallback(data, lightClient) {
+			if (data[0].result.length == 0) {
+				console.log("No Path!\n");
+				
+				//Check our status - get a new map, new target, and try again
+				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+				return;
+			}
+
+			//Follow the path
+			pathString = "{\"Path\":\"";
+			for (var p = 0; p < data[0].result.length; p++) {
+				var pt = data[0].result[p];
+
+				pathString = pathString + pt.x + ":" + pt.y;
+				if (p != data[0].result.length - 1) {
+					pathString = pathString + ",";
+				}
+			}
+			pathString = pathString + "\"}";
+
+			console.log(pathString);
+			lightClient.PostCommand("alpha/drive/path", pathString, function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
+		}
+
+		//Draw the map.
+		function ProcessMapData(grid, robotLocation) {
+			var boxSizeInPixels = 4;
+
+			//redraw the map here
+			var canvas = document.getElementById("mapCanvas");
+			var context = canvas.getContext("2d");
+
+			//Clear the old map
+			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			//create the scaled map
+			canvas.width = grid.width * boxSizeInPixels;
+			canvas.height = grid.height * boxSizeInPixels;
+			context.scale(boxSizeInPixels, boxSizeInPixels);
+
+			//grid is in Misty grid coordinates
+			for (var x = 0; x < grid.height; x++) {
+				for (var y = 0; y < grid.width; y++) {
+					context.beginPath();
+					context.lineWidth = 1;
+
+					switch (grid[x][y]) {
+						case 0:
+							// "Unknown"
+							context.fillStyle = 'rgba(0, 0, 0, 1.0)'; // Black = unknown
+							break;
+						case 1:
+							// "Open"
+							context.fillStyle = 'rgba(0, 255, 0, 1.0)'; // Green = floor
+							break;
+						case 2:
+							// "Occupied"
+							context.fillStyle = 'rgba(255, 0, 0, 1.0)'; // Red = obstacle
+							break;
+						case 3:
+							// "Covered"
+							context.fillStyle = 'rgba(255, 255, 0, 1.0)'; // Yellow - maybe?
+							break;
+						case -1:
+							//Explored
+							context.fillStyle = 'rgba(255, 0, 255, 1.0)';
+							break;
+						case -2:
+							//target
+							context.fillStyle = 'rgba(0, 255, 255, 1.0)';
+							break;
+						default:
+							context.fillStyle = 'rgba(0, 0, 255, 1.0)'; // Blue - What is this?
+							break;
+					}
+
+					//Convert to screen coordinates here
+					screenx = grid.width - y;
+					screeny = grid.height - x;
+					context.rect(screenx, screeny, 1, 1);
+					context.fill();
+				}
+			}
+
+			//Draw the robot
+			context.beginPath();
+			context.fillStyle = 'White';
+			screenx = grid.width - robotLocation.MistyGridY;
+			screeny = grid.height - robotLocation.MistyGridX;
+			context.rect(screenx, screeny, 1, 1);
+			context.fill();
+
+			//Robot's "nose" points in orientation direction
+			screenYaw = -Math.PI / 2 - robotLocation.MistyYaw;
+			screenx = screenx + Math.cos(screenYaw);
+			screeny = screeny + Math.sin(screenYaw);
+			context.beginPath();
+			context.fillStyle = 'Orange';
+			context.rect(screenx, screeny, 1, 1);
+			context.fill();
+
+		};
+	</script>
+
+</head>
+<body>
+	<div>
+		IP Address: <input id="misty-robot-ip-address" value="">
+		<p></p>
+		<button onclick="Explore()">Explore</button>
+		<input type="checkbox" id="StopExplore" />Stop
+		<p></p>
+		<label class="label-margin" id="get-pose-x-label">Pose X:</label>
+		<input class="form-control medium-textfield" type="text" id="current-x-pose" value="" readonly />
+		<label class="label-margin" id="get-pose-x-label">Pose Y:</label>
+		<input class="form-control medium-textfield" type="text" id="current-y-pose" value="" readonly />
+		<label class="label-margin" id="get-pose-z-label">Pose Z:</label>
+		<input class="form-control medium-textfield" type="text" id="current-z-pose" value="" readonly />
+		<p></p>
+		<label class="label-margin" id="get-pose-roll-label">Pose Roll:</label>
+		<input class="form-control medium-textfield" type="text" id="current-roll-pose" value="" readonly />
+		<label class="label-margin" id="get-pose-pitch-label">Pose Pitch:</label>
+		<input class="form-control medium-textfield" type="text" id="current-pitch-pose" value="" readonly />
+		<label class="label-margin" id="get-pose-yaw-label">Pose Yaw:</label>
+		<input class="form-control medium-textfield" type="text" id="current-yaw-pose" value="" readonly />
+		<p></p>
+		<label class="label-margin" id="get-pose-gridx-label">Pose GridX:</label>
+		<input class="form-control medium-textfield" type="text" id="current-gridx-pose" value="" readonly />
+		<label class="label-margin" id="get-pose-gridy-label">Pose GridY:</label>
+		<input class="form-control medium-textfield" type="text" id="current-gridy-pose" value="" readonly />
+		<p></p>
+		<canvas id="mapCanvas" style="border:1px solid #d3d3d3; margin:10px 0px 10px 0px;">
+			Sorry, but your browser does not support the HTML5 canvas tag.
+		</canvas>
+	</div>
+</body>
+</html>
