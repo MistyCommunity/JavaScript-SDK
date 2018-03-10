@@ -5,7 +5,7 @@
 	<script src="../Tools/javascript/lightClient.js"></script>
 	<script src="../Tools/javascript/lightSocket.js"></script>
 
-	<!--  Example 'Explore' skill.
+	<!--  Sample 'Explore' skill.
 		This skill uses the robot's map-making ability to intelligently determine where to drive, to fill out the map.
 		Everything starts with a call to SlamStatus, to make sure the system is running properly.
 		If the robot has pose and a map, it will look for a location on the boundry between 'safe' and 'unknown' that is far enough away.
@@ -35,28 +35,28 @@
 			//Create client for commanding motors
 			var lightClient = new LightClient(ip, 10000);
 
-			//Tell Misty to look slighly down to help with map generation. 
+			//Tell Misty to look slighly down to help with map generation.
 			await sleep(1000);
 			lightClient.PostCommand("beta/head/move", "{ \"Pitch\": \"1\", \"Velocity\": \"10\" }");
 
 			//Create socket for listening to sensors
 			lightSocket = new LightSocket(ip);
 			lightSocket.Connect();
-			
+
 			//Wait for connection
 			await sleep(5000);
 
-			//Get the position & orientation.  Two calls to minimize piping back all of selfState.  
+			//Get the position & orientation.  Two calls to minimize piping back all of selfState.
 
 			lightSocket.Subscribe("Position", "SelfState", 200, null, null, null, "Position", function (data) { $('#current-x-pose').val(data.message.x); $('#current-y-pose').val(data.message.y); $('#current-z-pose').val(data.message.z); });
-			
+
 			lightSocket.Subscribe("Orientation", "SelfState", 200, null, null, null, "Orientation", function (data) { $('#current-roll-pose').val(data.message.roll); $('#current-pitch-pose').val(data.message.pitch); $('#current-yaw-pose').val(data.message.yaw); });
-			
+
 			//And also get the computed grid position
 			lightSocket.Subscribe("GridCell", "SelfState", 200, null, null, null, "OccupancyGridCell", function (data) { $('#current-gridx-pose').val(data.message.x); $('#current-gridy-pose').val(data.message.y); });
 
 			await sleep(1000);
-			
+
 			//Start by checking status of SLAM system
 			lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
 		}
@@ -94,7 +94,7 @@
 			cantopen = status & 8192;
 			powerdown = status & 16384;
 
-			if (explore) { 
+			if (explore) {
 				//All good, we're making a map!
 				if (haspose) {
 					console.log("Have pose, getting map\n");
@@ -114,7 +114,7 @@
 				return;
 			}
 
-			if (ready || uninit) { 
+			if (ready || uninit) {
 				//Start mapping, then come back here
 				console.log("Sensor ready, starting mapping\n");
 				lightClient.PostCommand("alpha/slam/map/start", {}, function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); }) });
@@ -147,7 +147,7 @@
 			robotLocation.MistyGridY = parseFloat($("#current-gridy-pose").val());
 
 			//If no map or no pose, wait a bit and try again (via status check)
-			if (grid == null || grid.length == 0 || isNaN(robotLocation.MistyX) || isNaN(robotLocation.MistyY) || isNaN(robotLocation.MistyGridX) || isNaN(robotLocation.MistyGridY) || isNaN(robotLocation.MistyYaw)) { 
+			if (grid == null || grid.length == 0 || isNaN(robotLocation.MistyX) || isNaN(robotLocation.MistyY) || isNaN(robotLocation.MistyGridX) || isNaN(robotLocation.MistyGridY) || isNaN(robotLocation.MistyYaw)) {
 				//We know we have pose from status, but it may not have gotten here yet
 				console.log("Map or Pose empty, rechecking system\n");
 				await sleep(3000); //Might just need to wait a bit.  TODO - turn a tad
@@ -172,14 +172,14 @@
 				lightClient.PostCommand("drive/time", " {\"LinearVelocity\":" + 25 + ",\"AngularVelocity\":" + 0 + ", \"TimeMs\":" + 1000 + "}", function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
 				return;
 			}
-			else { 
+			else {
 				console.log("I know where I am!");
 
 				//Start with where we are, search outwards for an unknown
 				toCheck = [point];
 
 				//Tag it so we don't re-search it
-				grid[point.X][point.Y] = -1; 
+				grid[point.X][point.Y] = -1;
 				done = false;
 				while (!done && toCheck.length > 0) {
 					//This point is clear, check its neighbors
@@ -195,14 +195,14 @@
 							newPoint.Y = (point.Y + y);
 							if (newPoint.X >= 0 && newPoint.X < grid.height &&
 								newPoint.Y >= 0 && newPoint.Y < grid.width) {
-								if (grid[newPoint.X][newPoint.Y] == 0) { 
+								if (grid[newPoint.X][newPoint.Y] == 0) {
 									//Found an unknown point!  Let's explore here!
-									if ((Math.abs(newPoint.X - robotLocation.MistyGridX) + Math.abs(newPoint.Y - robotLocation.MistyGridY)) * grid.metersPerCell > 0.75) { 
+									if ((Math.abs(newPoint.X - robotLocation.MistyGridX) + Math.abs(newPoint.Y - robotLocation.MistyGridY)) * grid.metersPerCell > 0.75) {
 										done = true;
 										break;
 									}
 								}
-								if (grid[newPoint.X][newPoint.Y] == 1) { 
+								if (grid[newPoint.X][newPoint.Y] == 1) {
 									//This is clear, search from it
 									toCheck.push(newPoint);
 									//Mark it so we don't re-visit
@@ -229,7 +229,7 @@
 		async function slamPathCallback(data, lightClient) {
 			if (data[0].result.length == 0) {
 				console.log("No Path!\n");
-				
+
 				//Check our status - get a new map, new target, and try again
 				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
 				return;
