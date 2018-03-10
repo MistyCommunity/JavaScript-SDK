@@ -3,10 +3,10 @@ _To run these examples, make sure you have the Tools Directory in the same folde
 
 ## Sample Skills
 
-1. __Roar__ - A basic skill that will roar like a lion when a person gets too close.
-2. __Wander__ - A skill that enables Misty to roam about the environment without colliding with obstacles.
-3. __Explore__ - A skill that intelligently determines where to explore and expand Misty's map.
+1. __Skill-Roar__ - A basic skill that will roar like a lion when a person gets too close.
+2. __Skill-Wander__ - A skill that enables Misty to roam about the environment without colliding with obstacles.
+3. __Skill-Explore__ - A skill that intelligently determines where to explore and expand Misty's map.
 
-## Community skills
+## Community Skills
 
 More to come. Stay tuned.
