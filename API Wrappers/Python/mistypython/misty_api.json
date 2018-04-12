@@ -1,0 +1,73 @@
+{
+    "version" : 0.7,
+    "api" : { 
+
+          "methods" : [
+            { "name" : "GetHelp", "action" : "get", "args" : [] },
+            { "name" : "GetBatteryLevel", "action" : "get", "args" : [] },
+            { "name" : "GetDeviceInformation", "action" : "get", "args" : [] },
+
+            { "name" : "GetListOfAudioClips", "action" : "get", "args" : [] },
+            { "name" : "GetListOfAudioFiles", "action" : "get", "args" : [] },
+            { "name" : "GetListOfVideoClips", "action" : "get", "args" : [] },
+            { "name" : "GetListOfImages", "action" : "get", "args" : [] },
+
+            { "name" : "PlayAudioClip", "action" : "post", "args" : [ "assetid" ] },
+
+            { "name" : "GetStringSensorValues", "action" : "get", "args" : [] },
+
+            { "name" : "LocomotionTrack", "action" : "post", "args" : [ "lefttrackspeed", "righttrackspeed" ] },
+            { "name" : "DriveTime", "action" : "post", "args" : [ "linearvelocity", "angularvelocity", "timems", "degrees" ] },
+            { "name" : "Drive", "action" : "post", "args" : [ "linearvelocity", "angularvelocity" ] },
+            { "name" : "Stop", "action" : "get", "args" : [] },
+
+            { "name" : "MoveHead", "action" : "post", "args" : [ "pitchangle", "roll", "yaw", "velocity"] },
+            { "name" : "ChangeEyes", "action" : "post", "args" : [ "valence", "arousal", "dominance" ] },
+            { "name" : "ChangeLED", "action" : "post", "args" : [ "red", "green", "blue" ] },
+
+            { "name" : "ChangeDisplayImage", "action" : "post", "args" : [ "filenamewithoutpath" ] },
+            { "name" : "SaveAudioAssetToRobot", "action" : "post", "args" : [ "filenamewithoutpath", "dataasbytearraystring", "immediatelyapply", "overwriteexisting" ] },
+
+            { "name" : "StartFaceTraining", "action" : "post", "args" : [ "faceid" ] },
+            { "name" : "CancelFaceTraining", "action" : "get", "args" : [] },
+            { "name" : "GetLearnedFaces", "action" : "get", "args" : [] },
+            { "name" : "ClearLearnedFaces", "action" : "get", "args" : [] },
+            { "name" : "StartFaceDetection", "action" : "get", "args" : [] },
+            { "name" : "StopFaceDetection", "action" : "get", "args" : [] }
+
+          ],
+
+          "not_supported_yet" : [
+            "SlamStartMapping",
+            "SlamStopMapping",
+            "SlamStartTracking",
+            "SlamStopTracking",
+            "SlamStartRecording",
+            "SlamStopRecording",
+            "SlamGetMap",
+            "SlamGetRawMap",
+            "SlamGetPath",
+            "SlamGetStatus",
+            "SlamReset",
+            "SetFaceId",
+            "GetListOfEyeSprites",
+            "RevertDisplay",
+            "PerformSystemUpdate",
+            "GetStoreUpdateAvailable",
+
+            "AddAudioClip",
+            "ConnectWiFi", 
+            "MoveArm",
+            "MoveHeadToLocation",
+            "SetHeadPosition",
+            "FollowPath",
+            "SaveEyeSpriteToRobot",
+            "ChangeEyeSprite",
+            "AnimateDisplayImage",
+            "ChangeDisplayImage",
+            "ScaleImageAsset",
+            "SaveImageAssetToRobot",
+            "SaveFileToFolder"
+          ]
+    }
+}
