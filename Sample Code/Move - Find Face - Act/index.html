@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Move - Find Face - Act</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="../Tools/javascript/lightClient.js"></script>
+		<script src="../Tools/javascript/lightSocket.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div id="page-wrapper">
+			<h1>Move, Find a Face, Then Do Something</h1>
+			<div>
+				<h3>Connect to Robot: </h3>
+				<input type="text" id="ip-address" placeholder="IP Address" required />
+					<button type="button" id="connect">Connect</button>
+			</div>
+			<h3>Command: </h3>
+			<div id="command">
+				<p>Have Misty turn in a circle, scan for faces, and play an audio file when a face is detected.</p>
+				<button type="button" id="start">Start</button>
+				<button type="button" id="stop">Stop</button>
+			</div>
+			<h3>Console: </h3>
+			<textarea id="results"></textarea>
+		</div>
+		<footer>Background image: "All of us" wallpaper from Pottok.</footer>
+		<script src="app.js"></script>
+	</body>
+</html>
