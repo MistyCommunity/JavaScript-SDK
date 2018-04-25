@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Face Recognition</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="../Tools/javascript/lightClient.js"></script>
+		<script src="../Tools/javascript/lightSocket.js"></script>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div id="page-wrapper">
+			<h1>Face Recognition</h1>
+			<h3>Connect to Robot: </h3>
+			<input type="text" id="ip-address" placeholder="IP Address" required />
+			<button type="button" id="connect">Connect</button>
+			<button type="button" id="start">Start Face Recognition</button>
+			<button type="button" id="stop">Stop Face Recognition</button>
+			<h3>Results: </h3>
+			<textarea id="results"></textarea>
+		</div>
+		<script type="text/javascript" src="app.js"></script>
+	</body>
+</html>
