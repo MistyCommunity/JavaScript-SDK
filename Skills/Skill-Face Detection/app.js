@@ -1,18 +1,10 @@
-
-var ipAddress  = document.getElementById("ip-address");
-var connect = document.getElementById("connect");
+var form = document.getElementById("message-form");
+var ipAddress = document.getElementById("ip-address");
 var start = document.getElementById("start");
 var stop = document.getElementById("stop");
 var resultsBox = document.getElementById("results");
 
-var playAudioArg = {
-  "AssetId": "001-OooOooo.wav",
-};
 var client;
-var driveArgs = {
-  "LinearVelocity": 0,
-  "AngularVelocity": 5,
-};
 var ip;
 var msg = {
   "$id": "1",
@@ -26,11 +18,11 @@ var message = JSON.stringify(msg);
 var messageCount = 0;
 var socket;
 
-
 connect.onclick = function() {
   ip = validateIPAddress(ipAddress.value);
   if (!ip) {
     printToScreen("IP address needed.");
+    return;
   }
   client = new LightClient(ip, 10000);
   client.GetCommand("info/device", function(data) {
@@ -45,17 +37,11 @@ start.onclick = function() {
     return;
   }
   startFaceDetection();
-  client.PostCommand("drive", JSON.stringify(driveArgs));
-};
-
-stop.onclick = function() {
-  client.PostCommand("drive/stop");
-  stopFaceDetection();
 };
 
 function startFaceDetection() {
-    //Create a new websocket, if one is not already open
-    socket = socket ? socket : new WebSocket("ws://" + ip + "/pubsub");
+    //Create a new websocket
+    socket = new WebSocket("ws://" + ip + "/pubsub");
     //When the socket is open, send the message
     socket.onopen = function(event) {
       printToScreen("WebSocket opened.");
@@ -65,11 +51,12 @@ function startFaceDetection() {
     };
     // Handle messages received from the server
     socket.onmessage = function(event) {
-      client.PostCommand("drive/stop");
-      console.log(JSON.parse(event.data).message);
-      printToScreen("Face detected.");
-      var payload = JSON.stringify(playAudioArg);
-      client.PostCommand("audio/play", payload);
+      var message = JSON.parse(event.data).message;
+      messageCount += 1;
+      console.log(message);
+      if (messageCount % 5 === 0) {
+        printToScreen("I see a face!");
+      }
     };
     // Handle any errors that occur.
     socket.onerror = function(error) {
@@ -79,7 +66,13 @@ function startFaceDetection() {
     socket.onclose = function(event) {
       printToScreen("WebSocket closed.");
     };
-}
+};
+
+stop.onclick = function() {
+  client.PostCommand("beta/faces/detection/stop");
+  printToScreen("Face detection stopped.");
+  socket.close();
+};
 
 function validateIPAddress(ip) {
 	var ipNumbers = ip.split(".");
@@ -94,13 +87,7 @@ function validateIPAddress(ip) {
 		}
 	}
 	return ip;
-}
-
-function stopFaceDetection() {
-  client.PostCommand("beta/faces/detection/stop");
-  printToScreen("Face detection stopped.");
-  socket.close();
-}
+};
 
 function printToScreen(msg) {
   resultsBox.innerHTML += (msg + "\r\n");
