@@ -2,8 +2,8 @@
 _To run these examples, make sure you have the Tools Directory in the same folder as the root skill folders._
 
 ## Sample Code
-1. Find Face - Do Something
-2. Move - Find Face - Do Something
+1. __Find Face__ - Do Something
+2. __Move - Find Face__ - Do Something
 
 ## Skills
 
