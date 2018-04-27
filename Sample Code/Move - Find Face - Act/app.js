@@ -83,18 +83,18 @@ function startFaceDetection() {
 }
 
 function validateIPAddress(ip) {
-	var ipNumbers = ip.split(".");
-	var ipNums = new Array(4);
-	if (ipNumbers.length !== 4) {
-		return "";
-	}
-	for (let i = 0; i < 4; i++) {
-		ipNums[i] = parseInt(ipNumbers[i]);
-		if (ipNums[i] < 0 || ipNums[i] > 255) {
-			return "";
-		}
-	}
-	return ip;
+  var ipNumbers = ip.split(".");
+  var ipNums = new Array(4);
+  if (ipNumbers.length !== 4) {
+    return "";
+  }
+  for (let i = 0; i < 4; i++) {
+    ipNums[i] = parseInt(ipNumbers[i]);
+    if (ipNums[i] < 0 || ipNums[i] > 255) {
+    return "";
+    }
+  }
+  return ip;
 }
 
 function stopFaceDetection() {
