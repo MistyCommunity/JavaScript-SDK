@@ -26,6 +26,7 @@ connect.onclick = function() {
   ip = validateIPAddress(ipAddress.value);
   if (!ip) {
     printToScreen("IP address needed.");
+    return;
   }
   client = new LightClient(ip, 10000);
   client.GetCommand("info/device", function(data) {
