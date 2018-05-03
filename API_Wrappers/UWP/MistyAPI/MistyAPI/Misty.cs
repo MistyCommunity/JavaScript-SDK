@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Security.Credentials;
 using Windows.Security.Cryptography;
@@ -12,6 +11,9 @@ using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using Windows.Web.Http.Headers;
 using Windows.UI;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace MistyAPI
 {
@@ -27,6 +29,10 @@ namespace MistyAPI
         Happy,
         Love
     };
+
+    public delegate void MistyConnectedHandler(Misty misty);
+    public delegate void MistyDisconnectedHandler(Misty misty);
+
 
     public sealed class Misty
     {
@@ -52,14 +58,17 @@ namespace MistyAPI
         };
 
         const string kEndpointDeviceInfo = "/api/info/device";
-        const string kEndpointChangeEyes = "/api/ChangeEyes";
-        const string kEndpointChangeLED = "/api/ChangeLED";
+        const string kEndpointChangeEyes = "/api/eyes/change";
+        const string kEndpointChangeLED = "/api/led/change";
 
         const string kTimeout = "500"; // ms
 
         HttpClient httpClient;
         string ip;
         int port;
+
+        public event MistyConnectedHandler Connected;
+        public event MistyDisconnectedHandler Disconnected;
 
         private struct RemoteServerStringStatus
         {
@@ -70,7 +79,7 @@ namespace MistyAPI
         private struct RemoteServerJsonStatus
         {
             public HttpStatusCode statusCode;
-            public JsonObject json;
+            public JObject json;
         }
 
         public bool IsConnected
@@ -81,6 +90,22 @@ namespace MistyAPI
             }
         }
 
+        public string SerialNumber
+        {
+            get; internal set;
+        } = "";
+
+        public string RobotVersion
+        {
+            get; internal set;
+        } = "";
+
+        public string OSVersion
+        {
+            get; internal set;
+        } = "";
+
+
         public IAsyncOperation<HttpStatusCode> ConnectAsync(string ip, int port)
         {
             return ConnectAsyncTask(ip, port).AsAsyncOperation<HttpStatusCode>();
@@ -89,6 +114,11 @@ namespace MistyAPI
         public IAsyncOperation<HttpStatusCode> SetMoodAsync(Moods mood)
         {
             return setMoodTask(mood).AsAsyncOperation<HttpStatusCode>();
+        }
+
+        public IAsyncOperation<HttpStatusCode> SetEyesAsync(Moods mood)
+        {
+            return setEyesTask(moods[mood].valence, moods[mood].arousal, moods[mood].dominance).AsAsyncOperation<HttpStatusCode>();
         }
 
         internal async Task<HttpStatusCode> ConnectAsyncTask(string ip, int port)
@@ -107,24 +137,57 @@ namespace MistyAPI
             var jsonResp = await requestJson(kEndpointDeviceInfo);
             if (jsonResp.statusCode != HttpStatusCode.Ok)
             {
+                Disconnected?.Invoke(this);
                 return jsonResp.statusCode;
             }
 
-            var information = jsonResp.json.GetObject();
-            // todo: parse
+            var result = jsonResp.json.Value<JObject>("result");
+
+            RobotVersion = result.Value<string>("robotVersion");
+            OSVersion = result.Value<string>("windowsOSVersion");
+            SerialNumber = result.Value<string>("serialNumber");
+
+            Connected?.Invoke(this);
 
             return HttpStatusCode.Ok;
         }
 
         public void disconnect()
         {
-            httpClient?.Dispose();
-            httpClient = null;
+            if (httpClient != null)
+            {
+                Disconnected?.Invoke(this);
+
+                httpClient?.Dispose();
+                httpClient = null;
+            }
         }
 
         internal async Task<HttpStatusCode> setMoodTask(Moods mood)
         {
+            await setEyesTask(moods[mood].valence, moods[mood].arousal, moods[mood].dominance);
             return await setLEDTask(moods[mood].ledColor);
+        }
+
+        internal async Task<HttpStatusCode> setEyesTask(int valence, int arousal, int dominance)
+        {
+            var builder = new UriBuilder();
+            builder.Host = ip;
+            builder.Port = port;
+            builder.Path = kEndpointChangeEyes;
+
+            JObject obj = new JObject
+                (
+                    new JProperty("Valence", new JValue(valence)),
+                    new JProperty("Arousal", new JValue(arousal)),
+                    new JProperty("Dominance", new JValue(dominance))
+                );
+
+            var jsonString = obj.ToString();
+            var content = new HttpStringContent(jsonString);
+            var response = await httpClient.PostAsync(builder.Uri, content);
+
+            return response.StatusCode;
         }
 
         internal async Task<HttpStatusCode> setLEDTask(Color color)
@@ -134,18 +197,18 @@ namespace MistyAPI
             builder.Port = port;
             builder.Path = kEndpointChangeLED;
 
-            JsonObject obj = new JsonObject();
-            obj.SetNamedValue("red", JsonValue.CreateNumberValue(color.R));
-            obj.SetNamedValue("green", JsonValue.CreateNumberValue(color.G));
-            obj.SetNamedValue("blue", JsonValue.CreateNumberValue(color.B));
+            JObject obj = new JObject
+                (
+                    new JProperty("red", new JValue(color.R)),
+                    new JProperty("green", new JValue(color.G)),
+                    new JProperty("blue", new JValue(color.B))
+                );
 
             var content = new HttpStringContent(obj.ToString());
             var response = await httpClient.PostAsync(builder.Uri, content);
 
             return response.StatusCode;
         }
-
-
 
         private async Task<RemoteServerStringStatus> requestString(string endpoint)
         {
@@ -170,7 +233,15 @@ namespace MistyAPI
             resp.statusCode = stringResp.statusCode;
             if (stringResp.statusCode == HttpStatusCode.Ok)
             {
-                JsonObject.TryParse(stringResp.response, out resp.json);
+                try
+                {
+                    JArray array = JArray.Parse(stringResp.response);
+                    resp.json = array[0] as JObject;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message + ": " + e.StackTrace);
+                }
             }
 
             return resp;
