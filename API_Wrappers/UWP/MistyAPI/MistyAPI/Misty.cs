@@ -121,6 +121,11 @@ namespace MistyAPI
             return setEyesTask(moods[mood].valence, moods[mood].arousal, moods[mood].dominance).AsAsyncOperation<HttpStatusCode>();
         }
 
+        public IAsyncOperation<HttpStatusCode> SetLEDAsync(Color color)
+        {
+            return setLEDTask(color).AsAsyncOperation<HttpStatusCode>();
+        }
+
         internal async Task<HttpStatusCode> ConnectAsyncTask(string ip, int port)
         {
             disconnect();

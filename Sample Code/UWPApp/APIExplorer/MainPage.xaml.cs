@@ -143,5 +143,26 @@ namespace APIExplorer
                 await currentMisty.SetMoodAsync((Moods)selectedMood);
             }
         }
+
+        private void confirmColor_Click(object sender, RoutedEventArgs e)
+        {
+            Color c = myColorPicker.Color;
+            // Assign the selected color to a variable to use outside the popup.
+            var ignore = Task.Run(async () =>
+               {
+                   await currentMisty.SetLEDAsync(c);
+               });
+
+            colorPickerButton.Background = new SolidColorBrush(c);
+
+            // Close the Flyout.
+            colorPickerButton.Flyout.Hide();
+        }
+
+        private void cancelColor_Click(object sender, RoutedEventArgs e)
+        {
+            // Close the Flyout.
+            colorPickerButton.Flyout.Hide();
+        }
     }
 }
