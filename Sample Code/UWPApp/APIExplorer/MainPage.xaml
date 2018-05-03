@@ -6,33 +6,58 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <Flyout x:Key="myColorPickerFlyout">
+            <RelativePanel>
+                <ColorPicker x:Name="myColorPicker"
+                         IsColorChannelTextInputVisible="False"
+                         IsHexInputVisible="False"/>
+
+                <Grid RelativePanel.Below="myColorPicker"
+                  RelativePanel.AlignLeftWithPanel="True"
+                  RelativePanel.AlignRightWithPanel="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="OK" Click="confirmColor_Click"
+                        Margin="0,12,2,0" HorizontalAlignment="Stretch"/>
+                    <Button Content="Cancel" Click="cancelColor_Click"
+                        Margin="2,12,0,0" HorizontalAlignment="Stretch"
+                        Grid.Column="1"/>
+                </Grid>
+            </RelativePanel>
+        </Flyout>
+    </Page.Resources>
+    
     <StackPanel Orientation="Vertical" Padding="15,15,15,15">
         <StackPanel Name="ConnectPanel">
-        <TextBlock FontSize="24" FontWeight="SemiLight">Connect to Misty</TextBlock>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Vertical" Margin="0, 15, 0, 0" Padding="5,5,5,5">
-                <TextBlock Text="Select the Misty you'd like to work with:" />
-                <ComboBox 
-                    Margin="0,8,0,20"
-                    Width="300"
-                    HorizontalAlignment="Left" 
-                    ItemsSource="{x:Bind mistyFinder.MistyInstances}"
-                    SelectedIndex="{x:Bind SelectedIndex, Mode=TwoWay}"
-                    SelectionChanged="ConnectSelection_SelectionChanged"
-                    x:Name="ConnectSelection">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Padding="5,5,5,5">
-                                <TextBlock Text="{Binding}"></TextBlock>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <TextBlock x:Uid="IPAddressTextBlock" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="50, 15, 0, 0"  Padding="5,5,5,5">
-                <TextBlock Text="Enter the name or IP of Misty" />
-                <TextBox x:Name="ManualIPEntry"
+            <TextBlock FontSize="24" FontWeight="SemiLight">Connect to Misty</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="0, 15, 0, 0" Padding="5,5,5,5">
+                    <TextBlock Text="Select the Misty you'd like to work with:" />
+                    <ComboBox 
+                        Padding="5,5,5,5"
+                        Margin="0,8,0,20"
+                        Width="300"
+                        HorizontalAlignment="Left" 
+                        ItemsSource="{x:Bind mistyFinder.MistyInstances}"
+                        SelectedIndex="{x:Bind SelectedIndex, Mode=TwoWay}"
+                        SelectionChanged="ConnectSelection_SelectionChanged"
+                        x:Name="ConnectSelection">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock x:Uid="IPAddressTextBlock" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="50, 15, 0, 0"  Padding="5,5,5,5">
+                    <TextBlock Text="Enter the name or IP of Misty" />
+                    <TextBox x:Name="ManualIPEntry"
                         HorizontalAlignment="Left"
                 TextWrapping="Wrap" Text=""
                 IsSpellCheckEnabled="False" 
@@ -40,12 +65,12 @@
                 Margin="0,8,0,0"
                 Width="300"
                 />
+                </StackPanel>
+                <Button Name="ConnectButton" Margin="50, 15, 0, 0"  Padding="15,15,15,15" Click="ConnectButton_Click">Connect</Button>
+                <Canvas Margin="100, 15, 0, 0">
+                    <Ellipse Name="ConnectionState" Width="50" Height="50" Fill="Blue" Canvas.Top="20" Canvas.Left="20" StrokeThickness="3" />
+                </Canvas>
             </StackPanel>
-            <Button Name="ConnectButton"  Margin="50, 15, 0, 0"   Padding="15,15,15,15" Click="ConnectButton_Click">Connect</Button>
-            <Canvas Margin="100, 15, 0, 0">
-                <Ellipse Name="ConnectionState" Width="50" Height="50" Fill="Blue" Canvas.Top="20" Canvas.Left="20" StrokeThickness="3" />
-            </Canvas>
-        </StackPanel>
             <StackPanel Name="EmotionPanel">
                 <TextBlock FontSize="24" FontWeight="SemiLight">Set Misty Mood</TextBlock>
                 <StackPanel Orientation="Horizontal">
@@ -68,9 +93,15 @@
                         </ComboBox>
                         <TextBlock x:Uid="IPAddressTextBlock" />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="colorPickerButton"
+                            Content="Pick a color"
+                            Margin="50,5,50,20"
+                            Padding="15,15,15,15" 
+                            Flyout="{StaticResource myColorPickerFlyout}"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
     </StackPanel>
-
 </Page>
