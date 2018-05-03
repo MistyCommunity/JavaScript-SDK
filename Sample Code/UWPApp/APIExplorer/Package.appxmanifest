@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="4588faec-7574-4f60-b634-d9ec5fc84598" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>APIExplorer</DisplayName>
-    <PublisherDisplayName>lamadio</PublisherDisplayName>
+    <PublisherDisplayName>MistyRobotics</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
