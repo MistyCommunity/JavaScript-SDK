@@ -1,5 +1,5 @@
 # MistyI
-_A place to collaborate on skills, tools, wrappers, and any other enhancements for Misty I._
+_A place to collaborate on skills, tools, wrappers, and any other enhancements for Misty I. For much more on developing with Misty see the [Developer Documentation](https://docs.mistyrobotics.com)_ 
 
 ## Structure
 
