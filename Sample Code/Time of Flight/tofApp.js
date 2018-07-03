@@ -1,5 +1,5 @@
 var ip;
-var msg = {
+var subscribeMsg = {
   "Operation": "subscribe",
   "Type": "TimeOfFlight",
   "DebounceMs": 100,
@@ -14,16 +14,24 @@ var msg = {
   }
 };
 
-var message = JSON.stringify(msg);
+var unsubscribeMsg = {
+  "Operation": "unsubscribe",
+  "EventName": eventName,
+  "Message": ""
+};
+
+var subMsg = JSON.stringify(subscribeMsg);
+var unsubMsg = JSON.stringigy(unsubscribeMsg);
 var messageCount = 0;
 var socket;
+
 function startTimeOfFlight() {
     //Create a new websocket
     socket = new WebSocket("ws://" + ip + "/pubsub");
     //When the socket is open, subscribe to the event
     socket.onopen = function(event) {
       console.log("WebSocket opened.");
-      socket.send(message);
+      socket.send(subMsg);
     };
     // Handle messages received from the server
     socket.onmessage = function(event) {
@@ -31,6 +39,7 @@ function startTimeOfFlight() {
       messageCount += 1;
       console.log(message);
       if (messageCount == 10) {
+	socket.send(unsubMsg);
         socket.close();
       }
     };
