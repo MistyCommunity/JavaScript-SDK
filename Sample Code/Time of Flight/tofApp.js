@@ -21,7 +21,7 @@ var unsubscribeMsg = {
 };
 
 var subMsg = JSON.stringify(subscribeMsg);
-var unsubMsg = JSON.stringigy(unsubscribeMsg);
+var unsubMsg = JSON.stringify(unsubscribeMsg);
 var messageCount = 0;
 var socket;
 
