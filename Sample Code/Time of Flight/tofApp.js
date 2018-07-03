@@ -16,7 +16,7 @@ var subscribeMsg = {
 
 var unsubscribeMsg = {
   "Operation": "unsubscribe",
-  "EventName": eventName,
+  "EventName": "CenterTimeOfFlight",
   "Message": ""
 };
 
