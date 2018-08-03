@@ -1,7 +1,7 @@
 # Misty I Skills
-_To run these examples, you'll first need to use the green _Clone_ _or_ _download_ button on the [MistyI page](https://github.com/MistyCommunity/MistyI) to copy the files onto your desktop. This will also ensure that you have the Tools Directory in the same folder as the skill folders, which is needed for them to run._
+To run these examples, you'll first need to use the green __Clone or download__ button on the [MistyI page](https://github.com/MistyCommunity/MistyI) to copy the files onto your desktop. This will also ensure that you have the Tools Directory in the same folder as the skill folders, which is needed for them to run.
 
-_Then, just open up the .html file for any skill. It should open into a browser window. From there, you can simply enter your robot's IP address and start the skill. For a better view into the skill process, open the JavaScript console for the window, so you can see the commands and data that are being sent._ 
+Then, just open up the .html file for any skill. It should open into a browser window. From there, you can simply enter your robot's IP address and start the skill. For a better view into the skill process, open the JavaScript console for the window, so you can see the commands and data that are being sent.
 
 ## Skills
 
