@@ -57,12 +57,14 @@ function LightSocket(ip) {
 		websocket.close();
 	}
 
-	this.Connect = function () {
+	this.Connect = function (openCallback = null, closeCallback = null) {
 		var me = this;
 		websocket = new WebSocket("ws://" + ipAddress + "/pubsub");
 
 		websocket.onopen = function () {
-			console.log("Opened socket");//TODO Callback on this
+			if(openCallback) {
+				openCallback();
+			}
 		};
 
 		websocket.onmessage = function (event) {
@@ -81,7 +83,9 @@ function LightSocket(ip) {
 		};
 
 		websocket.onclose = function () {
-			console.log("Closed socket");//TODO Callback on this
+			if(closeCallback) {
+				closeCallback();
+			}
 		};
 
 		window.onbeforeunload = function (event) {
