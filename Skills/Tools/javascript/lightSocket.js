@@ -7,14 +7,14 @@
 // 		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // 		WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-function LightSocket(ip) {
+function LightSocket(ip, OnOpenCallback = null, OnCloseCallback = null, OnErrorCallback = null) {
 
 	var ipAddress = (ip === null ? "localhost" : ip);
 	var eventListeners = new Map();
 
 	this.Subscribe = function (eventName, msgType, debounceMs, property, inequality, value, returnProperty, eventCallback) {
-		eventName = eventName ? eventName : msgType
-		console.log("Subscribing to " + eventName);
+		eventName = eventName ? eventName : msgType;
+		console.log("Subscribing to " + msgType + " as " + eventName);
 
 		var msg = {
 			"$id": "1",
@@ -38,7 +38,7 @@ function LightSocket(ip) {
 		var message = JSON.stringify(msg);
 		websocket.send(message);
 		eventListeners.set(eventName, eventCallback);
-	}
+	};
 
 	this.Unsubscribe = function (eventName) {
 		var msg = {
@@ -51,40 +51,56 @@ function LightSocket(ip) {
 		websocket.send(message);
 		eventListeners.delete(eventName);
 		console.log("Unsubscribing from " + eventName);
-	}
+	};
 
 	this.Disconnect = function () {
 		websocket.close();
-	}
+	};
 
-	this.Connect = function (openCallback = null, closeCallback = null) {
+	this.Connect = function () {
 		var me = this;
 		websocket = new WebSocket("ws://" + ipAddress + "/pubsub");
 
-		websocket.onopen = function () {
-			if(openCallback) {
-				openCallback();
+		websocket.onopen = function (event) {
+			console.log("Opened socket");
+			if (OnOpenCallback) {
+				OnOpenCallback(event.data);
 			}
 		};
 
 		websocket.onmessage = function (event) {
 			try {
-				//Parse the Json if possible and call the callback, otherwise it is probably a status
+				// Parse the JSON if possible.
 				var theDataObject = JSON.parse(event.data);
 				var messageId = theDataObject.eventName ? theDataObject.eventName : theDataObject.type;
+
+				//Call the callback, otherwise it is probably a status
 				if (eventListeners.has(messageId)) {
 					eventListeners.get(messageId)(theDataObject);
 				}
 			}
 			catch (e) {
-				//TODO this is not necessarily an error just because it is not valid json
-				console.log("Invalid Json or failure obtaining callback", event.data);
+				//TODO this is not necessarily an error just because it is not valid JSON.
+				console.log("Invalid JSON or failure obtaining callback", event.data);
 			}
 		};
 
-		websocket.onclose = function () {
-			if(closeCallback) {
-				closeCallback();
+		websocket.onclose = function (event) {
+			console.log("Closed socket");
+			if (OnCloseCallback) {
+				OnCloseCallback(event.data);
+			}
+		};
+
+		websocket.onerror = function (event) {
+			if (OnErrorCallback) {
+				var theData = {
+					timeStamp: event.timeStamp,
+					type: event.type,
+					url: event.target.url
+				};
+
+				OnErrorCallback(theData);
 			}
 		};
 
@@ -93,10 +109,10 @@ function LightSocket(ip) {
 		};
 
 		return websocket;
-	}
+	};
 
 	this.Disconnect = function () {
 		console.log("Disconnected from socket");
 		websocket.close();
-	}
-};
+	};
+}
