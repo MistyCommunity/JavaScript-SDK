@@ -102,7 +102,7 @@
 
 			// Give Misty time to complete the face training process. Call sleep and pass in the value 20000 for 20 seconds. 
             await sleep(20000);
-            // Print a message to the console that face training is complete. Then, use Axios to send a POST request to the endpoint for theStartFaceRecognition command.
+            // Print a message to the console that face training is complete. Then, use Axios to send a POST request to the endpoint for the StartFaceRecognition command.
 			console.log("face training complete");
 			axios.post("http://" + ip + "/api/beta/faces/recognition/start");
         };
