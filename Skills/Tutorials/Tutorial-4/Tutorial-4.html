@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Remote Command Tutorial 4</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Include references to a CDN for the Axios library and the local path where lightSocket.js is saved in the <head> of your document -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="<local-path-to-lighSocket.js>"></script>
+</head>
+<body>
+	<!--Create a canvas element to hold the graphic map-->
+	<canvas id="mapCanvas" class="col-md-9 col-sm-12 mr-2"></canvas>
+	<script>
+		/* GLOBALS */
+
+		// Declare a global variable ip and set its value to a string with your robot's IP address.
+		const ip = "<robotipaddress>";
+		// Declare a global variable pixelsPerGrid and set its value to 10. This variable is used in the drawMap() function to determine the size (in pixels) of the map. Adjust this value to change the size of the map.
+		const pixelsPerGrid = 10;
+		// Define a global variable to keep track of whether we are subscribed to the event.
+		let subscribed = false;
+		// Use global variables to keep track of whether Misty is ready to start mapping. Define the global variable ready near the top of the program and initialize it as false.
+		let ready = false;
+		//  We also want to track when Misty is in the process of mapping. Declare a variable mapping and set it to false as well.
+		let mapping = false;
+		// Create a new instance of LightSocket called socket. Pass as arguments the ip variable and a function named openCallback.
+		let socket = new LightSocket(ip, openCallback);
+
+		/*TIMEOUT */
+
+        // Define a helper function called sleep that can pause code execution for a set period of time.
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+		/* CALLBACKS */
+
+		// Define the function passed as the callback to the new instance of LightSocket. This is the code that executes when socket opens a connection to your robot.
+		function openCallback() {
+			// Call subscribeSelfState() to subscribe to SelfState events only after you establish a connection to Misty.
+			subscribeSelfState();
+			// Call the startMapping() function to start mapping after the event subscription is established.
+			startMapping();
+		}
+		// Define the callback function that handles data sent through the event subscription. 
+		function _SelfState(data) {
+			// Update subscribed to true.   
+			if (!subscribed) {
+				subscribed = true;
+				// Print a message to the console to indicate that a subscription is established and that Misty is obtaining pose
+				console.log("1 - Subscribed to SelfState, getting pose");
+			}
+			// Update global variables depending on the SLAM sensor's status. Wrap this next block inside a try, catch statement to handle any unforeseen exceptions.
+			try {
+				// The value of data.message will be an object if is relevant to our slamStatus event. Ensure a message is relevant data by executing the code in this if statment only under the condition that the value of data.message is not a string
+				if (typeof data.message != "string") {
+
+					// The status of the SLAM system is contained within data.message. Declare a variable runMode to hold the current status of the SLAM system.
+					let runMode = data.message.runMode;
+					// Print a message to the console with the value of this variable to see the current status of the SLAM system as the program runs.
+					console.log("runMode: " + runMode);
+					// Write a switch statement that checks the value of runMode. If it is equal to the string "Ready", break from the statement and do nothing ("Ready" is the initial state of the sensor). If it is equal to "Exploring", pose is obtained and Misty is ready to start driving around to collect map data. In this case we want to update ready to true to break the while loop within getMap() and continue execution in that function. 
+					switch (runMode) {
+						case "Ready":
+							break
+						case "Exploring":
+							ready = true;
+							break
+						// If runMode is equal to the string "Paused", update mapping to false. This will occur a few seconds after we issue the SlamStopMapping command.
+						case "Paused":
+							mapping = false;
+							break
+					}
+				}
+			}
+			catch (e) {
+			}
+		}
+
+		/* WEBSOCKET SUBSCRIPTION FUNCTIONS */
+		// Create a function called subscribeSelfState() to subscribe to SelfState events.
+		function subscribeSelfState() {
+			// Call socket.Subscribe(). Pass "SlamStatus" for the eventName argument and "SelfState" for msgType. Pass 5000 for debounceMS to tell Misty to send a SelfState message every 5 seconds. Pass null for the property,inequality, and value arguments. For the returnProperty argument, enter the string "slamStatus" to trim the message to include only the desired SLAM status data. For eventCallback, pass _SelfState as the name of the callback function to run when you receive data from this subscription.
+			socket.Subscribe("SlamStatus", "SelfState", 5000, null, null, null, "slamStatus", _SelfState);
+		}
+		// Define unsubscribeSelfState() to unsubscribe from the SelfState event. Call socket.Unsubscribe() within the function, passing the string "SlamStatus" (the name given the SelfState event).
+		function unsubscribeSelfState() {
+			socket.Unsubscribe("SlamStatus");
+		}
+
+
+		/* COMMANDS */
+
+		// Declare a function that sends the command to start mapping.
+		async function startMapping() {
+			// Use a while loop to run sleep() (for 500 milliseconds) repeatedly for as long as subscribed is set to false.
+			while (!subscribed) {
+				await sleep(500);
+			}
+			// update state
+			mapping = true;
+			// Use `axios.post()` to send a POST request to the endpoint for the `SlamStartMapping` command.
+			axios.post("http://" + ip + "/api/alpha/slam/map/start");
+			getMap();
+		}
+
+		// Define getMap() as an asynchronous function. getMap() will gather map data as Misty drives around her enviornment and return it to your program when she is done mapping.
+		async function getMap() {
+			// Create a while loop that runs sleep() repeatedly for as long as ready is set to false. This pauses execution until Misty has obtained pose.
+			while (!ready) {
+				await sleep(500);
+			}
+			// Log a message to the console to indicate that pose is obtained and Misty is ready to start collecting map data.
+			console.log("2 - Pose obtained, starting mapping");
+			// Use an alert to pause execution of the program and give Misty time to drive around collecting data. Execution of the program only continues once the user clicks OK.
+			alert("Head over to the API explorer and drive Misty around the room to gather map data. Once finished, hit ok to proceed.");
+			// Use axios.post() to send a POST request to the endpoint for the SlamStopMapping command.
+			axios.post("http://" + ip + "/api/alpha/slam/map/stop");
+			// Write another while loop to pause execution while mapping is true.
+			while (mapping) {
+				await sleep(500);
+			}
+
+			// Print a message to the console indicating the mapping process has stopped and the map is being obtained.
+			console.log("3 - Mapping has stopped, obtaining map");
+
+			// Use axios.get() to send a GET request to the endpoint for the SlamGetRawMap command. Use then() to call two new functions, unsubscribeSelfState() and processMap(). We use these commands to respectively unsubscribe from the event and generate a graphical map from the map data. Log any errors to the console within a catch() statement.
+			axios.get("http://" + ip + "/api/alpha/slam/map/raw")
+				.then((data) => {
+					unsubscribeSelfState();
+					processMap(data);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
+		// Define the processMap() function to isolate the map data.
+		function processMap(res) {
+			// Print a log message indicating we have recieved the map data.
+			console.log("4 - Recieved map, processing map data");
+			// Define a variable to store the map data sent with the response.
+			let data = res.data;
+			// Pass data into drawMap() to draw the map in the browser.
+			drawMap(data)
+		}
+
+		/*** Map-drawing Code from API explorer ***/
+		// Use this function from the API Explorer source code to create a graphic image of the map Misty generates.
+		function drawMap(data) {
+			var canvas = document.getElementById("mapCanvas");
+			var context = canvas.getContext("2d");
+			canvas.width = (data[0].result.width - 1) * pixelsPerGrid;
+			canvas.height = (data[0].result.height - 1) * pixelsPerGrid;
+			context.scale(pixelsPerGrid, pixelsPerGrid);
+			data[0].result.grid.reverse().forEach(function (item) { item.reverse(); });
+			for (var currentX = data[0].result.height - 1; currentX >= 0; currentX--) {
+				for (var currentY = data[0].result.width - 1; currentY >= 0; currentY--) {
+					context.beginPath();
+					context.lineWidth = 1;
+					switch (data[0].result.grid[currentX][currentY]) {
+						case 0:
+							// "Unknown"
+							context.fillStyle = 'rgba(133, 133, 133, 1.0)'; // '#858585';
+							break;
+						case 1:
+							// "Open"
+							context.fillStyle = 'rgba(255, 255, 255, 1.0)'; // '#FFFFFF';
+							break;
+						case 2:
+							// "Occupied"
+							context.fillStyle = 'rgba(42, 42, 42, 1.0)'; // '#2A2A2A';
+							break;
+						case 3:
+							// "Covered"
+							context.fillStyle = 'rgba(102, 0, 237, 1.0)'; // 'rgba(33, 27, 45, 0.5)'; // '#6600ED';
+							break;
+						default:
+							context.fillStyle = '#ff9b9b';
+							break;
+					}
+					context.rect(currentY - 1 * pixelsPerGrid, currentX - 1 * pixelsPerGrid, pixelsPerGrid, pixelsPerGrid);
+					context.fill();
+				}
+			}
+			alert("Skill finished! Successfully obtained and drew a map!");
+		}
+
+		// Open the connection to your robot.
+		
+		socket.Connect();
+	</script>
+</body>
+</html>
