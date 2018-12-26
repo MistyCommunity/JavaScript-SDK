@@ -11,6 +11,7 @@ Then, just open up the .html file for any skill. It should open into a browser w
 4. __Skill-Face Detection__ - A skill for detecting faces in the environment.
 5. __Skill-Face Recognition__ - A skill for recognizing faces that Misty has been trained to identify.
 6. __Skill-Face Training__ - A skill for creating a face object that Misty can later recognize.
+7. __Skill-Weather Gauge__ - A skill for detecting and reacting to the weather in Misty's current location.
 
 ## Community Skills
 
