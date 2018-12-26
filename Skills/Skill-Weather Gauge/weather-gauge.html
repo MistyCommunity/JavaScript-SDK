@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Skill-Weather Gauge</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="../tools/javascript/lightSocket.js"></script>
+</head>
+<body>
+
+    	<!--  Sample 'Roar' skill.
+		This skill uses the APIXU weather API to have Misty display a response to the weather in her current locaiton. It requires that all of the audio assets in ./assets/sounds folder have been previously loaded onto the robot.
+
+		Copyright 2018 Misty Robotics, Inc.
+
+		Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+		to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+		and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+		The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+		WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    -->
+    
+
+    <script>
+        // Replace the following with a valid key for the APIXU API.
+        // You can obtain a valid key by registering for an account with APIXU.
+		let key;
+		let lat;
+		let long;
+		let tz_id;
+		let dataReceived = false;
+		let weatherCode;
+		let weatherType;
+		let generalType;
+		let codes = [
+			[1000],
+			[1003, 1006, 1009, 1063, 1135, 1147],
+			[1030, 1069, 1072, 1150, 1153, 1168, 1171, 1180, 1183, 1186, 1189, 1192, 1195, 1198, 1201, 1204, 1207, 1240, 1243, 1246, 1249, 1252],
+			[1066, 1114, 1117, 1210, 1213, 1216, 1219, 1222, 1225, 1237, 1258, 1261, 1264],
+			[1087, 1273, 1276, 1279, 1282]
+		];
+		let types = [
+			"sunny",
+			"cloudy",
+			"rainy",
+			"snowy",
+			"thundery"
+		];
+
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms))
+        }
+        
+        function getWeatherData() {
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                lat = pos.coords.latitude;
+                long = pos.coords.longitude;
+                key = document.getElementById("apixu-api-key").value;
+    
+                axios.get("http://api.apixu.com/v1/current.json?key=" + key + "&q=" + lat + "," + long,)
+                    .then(function (res) {
+                        tz_id = res.data.location.tz_id;
+                        weatherCode = res.data.current.condition.code;
+                        weatherType = res.data.current.condition.text;
+                        dataReceived = true;
+                    })
+                    .catch(function (err) {
+                        console.log("Error: " + err);
+                    });
+            })
+        }
+
+
+		async function mistyWeatherGauge() {
+            getWeatherData();
+			while (!dataReceived) {
+				await sleep(500);
+			}
+			for (let i = 0; i < codes.length; i++) {
+				if (codes[i].includes(weatherCode)) {
+					generalType = types[i];
+				}
+			}
+			console.log("tz_id: " + tz_id);
+			console.log("Weather type: " + weatherType);
+			console.log("Weather code: " + weatherCode);
+			console.log("General type: " + generalType);
+
+			emotiveResponse();
+		}
+
+		async function emotiveResponse() {
+
+            var ip = document.getElementById("misty-robot-ip-address").value;
+			let image;
+			let led;
+			let sound;
+
+			switch (generalType) {
+				case "sunny":
+					image = "Happy.jpg";
+					led = [255, 255, 0]; // yellow
+					sound = "sunny.mp3";
+					break
+				case "cloudy":
+					image = "Unamused.jpg";
+					led = [160, 160, 160]; // grey
+					sound = "cloudy.mp3";
+					break
+				case "rainy":
+					image = "Sad.jpg";
+					led = [0, 0, 255]; // blue
+					sound = "rainy.mp3";
+					break
+				case "snowy":
+					image = "Angry.jpg";
+					led = [255, 255, 255]; // white
+					sound = "snowy.mp3";
+					break
+				case "thundery":
+					image = "Concerned.jpg";
+					led = [255, 255, 0]; // red
+					sound = "thundery.mp3";
+					break
+			}
+
+			axios.post("http://" + ip + "/api/images/change", { FileName: image, TimeOutSeconds: 5, Alpha: 1 });
+			axios.post("http://" + ip + "/api/led/change", { red: led[0], green: led[1], blue: led[2] });
+			axios.post("http://" + ip + "/api/audio/play", { AssetId: sound });
+			await sleep(6000);
+			axios.post("http://" + ip + "/api/led/change", { red: 0, green: 0, blue: 0 }); // off
+			
+		}
+    </script>
+    
+
+    <div>
+            Misty's IP Address: <input id="misty-robot-ip-address" placeholder="robo-ip-address">
+            <p></p>
+            APIXU API key: <input id="apixu-api-key" placeholder="api-key"> 
+            <p></p>
+            Don't have a key? <a href="https://www.apixu.com/signup.aspx">Register for one for free.</a>
+            <p></p>
+            <button onclick="mistyWeatherGauge()">Get Weather</button>
+    </div>
+
+</body>
+</html>
