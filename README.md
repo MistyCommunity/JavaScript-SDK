@@ -3,5 +3,5 @@ _A place to collaborate on code samples, tools, wrappers, and any other enhancem
 
 ## Structure
 
-1. __Sample Code__ Code samples that show how to use Misty's REST API to have her do useful and interesting things. Also includes the code files for the Misty's [remote command interface tutorials](https://docs.mistyrobotics.com/coding/using-remote-commands/tutorials/).
+1. __Sample Code__ Code samples that show how to use Misty's REST API to have her do useful and interesting things. Also includes the code files for Misty's [remote command interface tutorials](https://docs.mistyrobotics.com/coding/using-remote-commands/tutorials/).
 2. __API Wrappers__ - These are a few choice wrappers for using Misty I with your favorite programming language.
