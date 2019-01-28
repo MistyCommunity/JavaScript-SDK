@@ -13,3 +13,4 @@ For many samples, you can simply enter your robot's IP address and start executi
 * __Face Recognition__ - Misty recognizes faces that she has been trained to identify.
 * __Face Training__ - An interface for training a face object that Misty can later recognize.
 * __Tutorial | Changing Misty's LED__ - The full code sample from the tutorial on [Changing Misty's LED](https://docs.mistyrobotics.com/coding/using-remote-commands/tutorials/#changing-misty-s-led).
+* __Tutorial | Using Sensors, WebSockets, and Locomotion__ - The full code sample from the tutorial on [Using Sensors, WebSockets, and Locomotion](https://docs.mistyrobotics.com/coding/using-remote-commands/tutorials/#using-sensors-websockets-and-locomotion). 
