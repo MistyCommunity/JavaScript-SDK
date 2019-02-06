@@ -1,10 +1,10 @@
-# Misty I Sample Code
+# Sample Code
 
 To run these examples, you'll first need to use the green __Clone or download__ button on the [SampleCode](https://github.com/MistyCommunity/SampleCode) to copy the files onto your desktop. This will also ensure that you have the **Tools** directory in the same folder as the code samples, which is needed for them to run. Then, just open up the `.html` file for any code sample. It should open into a browser window.
 
 For many samples, you can simply enter your robot's IP address and start execution. Other samples require you to manually input your robot's IP address in the `.html` file. For a better view into the commands being sent to your robot, open the JavaScript console for the browser window.
 
-## Sample Code
+## Contents
 
 * __Find Face - Do Something__ - Have Misty play an audio clip when a face is detected.
 * __Move - Find Face - Do Something__ - Have Misty move, then stop and play an audio clip when a face is detected.
