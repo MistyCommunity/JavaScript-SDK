@@ -1,4 +1,0 @@
-include mistypython/*.json
-include README.md
-include LICENSE
-include CHANGELOG
