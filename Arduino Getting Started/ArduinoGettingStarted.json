@@ -1,0 +1,11 @@
+{
+  "Name": "ArduinoGettingStarted",
+  "UniqueId": "12b8f3fa-e83b-43bf-a799-9ef6ab0e5d26",
+  "Description": "Basics for communicating data from Arduino to Misty",
+  "StartupRules": ["Manual"],
+  "Language": "javascript",
+  "BroadcastMode": "debug",
+  "TimeoutInSeconds": 36000,
+  "CleanupOnCancel": true,
+  "WriteToLog": false
+}
