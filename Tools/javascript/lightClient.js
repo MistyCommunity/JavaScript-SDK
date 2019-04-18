@@ -36,7 +36,7 @@ function LightClient(ip, ajaxTimeout) {
 			timeout: this._timeout
 		})
 			.done(function (data, status, xhr) {
-				if (data === null || data[0] === null || data[0].status === "Error") {
+				if (data === null || data[0] === null || data.result.status === "Error") {
 					console.log("Get " + (version ? version : "") + "Response Error:", data[0].errorMessage);
 				}
 				else if (successCallback) {
@@ -61,7 +61,7 @@ function LightClient(ip, ajaxTimeout) {
 			timeout: this._timeout
 		})
 			.done(function (data) {
-				if (data === null || data[0] === null || data[0].status === "Error") {
+				if (data === null || data[0] === null || data.result.status === "Error") {
 					console.log("Post " + (version ? version : "") + "Response Error:", data[0].errorMessage);
 				}
 				else if (successCallback) {
