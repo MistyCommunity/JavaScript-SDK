@@ -42,7 +42,7 @@ implied.
 
 			//Tell Misty to look slighly down to help with map generation.
 			await sleep(1000);
-			lightClient.PostCommand("beta/head/move", "{ \"Pitch\": \"1\", \"Velocity\": \"10\" }");
+			lightClient.PostCommand("head", "{ \"Pitch\": \"1\", \"Velocity\": \"10\" }");
 
 			//Create socket for listening to sensors
 			lightSocket = new LightSocket(ip);
@@ -63,7 +63,7 @@ implied.
 			await sleep(1000);
 
 			//Start by checking status of SLAM system
-			lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+			lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) });
 		}
 
 		async function slamStatusCallback(data, lightClient) {
@@ -71,7 +71,7 @@ implied.
 				document.getElementById('StopExplore').checked = false;
 
 				//Stop mapping
-				lightClient.PostCommand("alpha/slam/map/stop");
+				lightClient.PostCommand("slam/map/stop");
 				return;
 			}
 
@@ -103,33 +103,33 @@ implied.
 				//All good, we're making a map!
 				if (haspose) {
 					console.log("Have pose, getting map\n");
-					lightClient.GetCommand("alpha/slam/map/raw", function (data) { slamMapCallback(data, lightClient) });
+					lightClient.GetCommand("slam/map", function (data) { slamMapCallback(data, lightClient) });
 					return;
 				}
 				if (lostpose) {
 					console.log("Lost my pose, should invert control\n");
 					await sleep(1000);
-					lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); });
+					lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient); });
 					return;
 				}
 				//Never pose situation
 				console.log("Have never had pose, wait or wiggle?\n");
 				await sleep(1000);
-				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); });
+				lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient); });
 				return;
 			}
 
 			if (ready || uninit) {
 				//Start mapping, then come back here
 				console.log("Sensor ready, starting mapping\n");
-				lightClient.PostCommand("alpha/slam/map/start", {}, function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient); }) });
+				lightClient.PostCommand("slam/map/start", {}, function () { lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient); }) });
 				return;
 			}
 
 			//Not ready yet, wait.
 			console.log("Sensor not ready - waiting and rechecking\n");
 			await sleep(1000);
-			lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+			lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) });
 		}
 
 		async function slamMapCallback(data, lightClient) {
@@ -156,7 +156,7 @@ implied.
 				//We know we have pose from status, but it may not have gotten here yet
 				console.log("Map or Pose empty, rechecking system\n");
 				await sleep(3000); //Might just need to wait a bit.  TODO - turn a tad
-				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+				lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) });
 				return;
 			}
 
@@ -174,7 +174,7 @@ implied.
 
 				//Just wander, trusting the ToFs
 				console.log("In the unknown, can't plan, wandering\n");
-				lightClient.PostCommand("drive/time", " {\"LinearVelocity\":" + 25 + ",\"AngularVelocity\":" + 0 + ", \"TimeMs\":" + 1000 + "}", function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
+				lightClient.PostCommand("drive/time", " {\"LinearVelocity\":" + 25 + ",\"AngularVelocity\":" + 0 + ", \"TimeMs\":" + 1000 + "}", function () { lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
 				return;
 			}
 			else {
@@ -227,7 +227,7 @@ implied.
 
 				//point is the 'nearest' clear spot adjoining an unknown that is far enough away to see.
 				//Get a path
-				lightClient.GetCommand("alpha/slam/path?X=" + point.X + "&Y=" + point.Y, function (data) { slamPathCallback(data, lightClient) });
+				lightClient.GetCommand("slam/path?X=" + point.X + "&Y=" + point.Y, function (data) { slamPathCallback(data, lightClient) });
 			}
 		}
 
@@ -236,7 +236,7 @@ implied.
 				console.log("No Path!\n");
 
 				//Check our status - get a new map, new target, and try again
-				lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) });
+				lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) });
 				return;
 			}
 
@@ -253,7 +253,7 @@ implied.
 			pathString = pathString + "\"}";
 
 			console.log(pathString);
-			lightClient.PostCommand("alpha/drive/path", pathString, function () { lightClient.GetCommand("alpha/slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
+			lightClient.PostCommand("drive/path", pathString, function () { lightClient.GetCommand("slam/status", function (data) { slamStatusCallback(data, lightClient) }); });
 		}
 
 		//Draw the map.

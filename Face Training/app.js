@@ -37,7 +37,7 @@ var messageCount = 0;
 var socket;
 
 cancel.onclick = function() {
-  client.PostCommand("beta/faces/training/cancel");
+  client.PostCommand("faces/training/cancel");
   printToScreen("Face training canceled.");
 }
 
@@ -48,7 +48,7 @@ connect.onclick = function() {
     return;
   }
   client = new LightClient(ip, 10000);
-  client.GetCommand("info/device", function(data) {
+  client.GetCommand("device", function(data) {
     printToScreen("Connected to robot.");
     console.log(data);
   });
@@ -63,11 +63,11 @@ start.onclick = function() {
   var payload = {
     "FaceId": name
   }
-  client.PostCommand("beta/faces/training/start", JSON.stringify(payload), handleData);
+  client.PostCommand("faces/training/start", JSON.stringify(payload), handleData);
 }
 
 function handleData (data) {
-  if (data[0].result) {
+  if (data.result) {
     printToScreen("Face training started. Hold face in front of camera for 10 seconds.");
   }
   console.log(data);

@@ -41,7 +41,7 @@ connect.onclick = function() {
     return;
   }
   client = new LightClient(ip, 10000);
-  client.GetCommand("info/device", function(data) {
+  client.GetCommand("device", function(data) {
     printToScreen("Connected to robot.");
     console.log(data);
   });
@@ -55,7 +55,7 @@ start.onclick = function() {
 };
 
 stop.onclick = function() {
-  client.PostCommand("beta/faces/recognition/stop");
+  client.PostCommand("faces/recognition/stop");
   printToScreen("Face recognition stopped.");
   socket.close();
 };
@@ -67,7 +67,7 @@ function startFaceRecognition() {
     socket.onopen = function(event) {
       printToScreen("WebSocket opened.");
       socket.send(message);
-      client.PostCommand("beta/faces/recognition/start", null, handleResult);
+      client.PostCommand("faces/recognition/start", null, handleResult);
     };
     // Handle messages received from the server
     socket.onmessage = function(event) {
@@ -95,7 +95,7 @@ function startFaceRecognition() {
 
 function handleResult(data) {
   console.log(data);
-  if (data[0].result) {
+  if (data.result) {
     printToScreen("Face recognition started.")
   }
 }

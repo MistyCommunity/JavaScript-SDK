@@ -43,15 +43,16 @@ implied.
 			var lightClient = new LightClient(ip, 10000);
 
 			//Subscribe to face detection
-			lightSocket.Subscribe("FaceDetection", "FaceDetection", 200, null, null, null, null, function (data) { roarStep(data, lightClient, lightSocket); });
+			lightSocket.Subscribe("FaceRecognition", "FaceRecognition", 200, null, null, null, null, function (data) { roarStep(data, lightClient, lightSocket); });
 		}
 
 		async function roarStep(data, lightClient, lightSocket) {
+			console.log(data)
 			console.log("I see a face! " + data.message.distance)
 			if (data.message.distance < 50) //Units?
 			{
 				lightClient.PostCommand("audio/play", "{\"AssetId\":\"Roar.wav\"}");
-				lightSocket.Unsubscribe("FaceDetection");
+				lightSocket.Unsubscribe("FaceRecognition");
 			}
 		}
 

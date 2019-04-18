@@ -13,10 +13,10 @@
 *    limitations under the License.
 */
 
-misty.AddReturnProperty("StringMessage", "StringMessage");
-misty.RegisterEvent("StringMessage", "StringMessage", 0, true);
+misty.AddReturnProperty("SerialMessage", "SerialMessage");
+misty.RegisterEvent("SerialMessage", "SerialMessage", 0, true);
  
-function _StringMessage(data) {	
+function _SerialMessage(data) {	
 	
 	try{
 
