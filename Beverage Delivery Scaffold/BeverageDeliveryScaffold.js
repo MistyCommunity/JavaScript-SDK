@@ -4,7 +4,8 @@ misty.Pause(3000);
 
 //Register Cap Touch to trigger events
 misty.AddReturnProperty("Touched", "sensorName");
-misty.RegisterEvent("Touched", "TouchSensor", 250 ,true);
+misty.AddReturnProperty("Touched", "IsContacted");
+misty.RegisterEvent("Touched", "TouchSensor", 50 ,true);
 
 //Register Bump Sensor events
 misty.AddReturnProperty("Bumped", "sensorName",);
@@ -18,51 +19,56 @@ misty.Set("touchTimeout", 3);
 function _Touched(data) {
 
 	var sensor = data.AdditionalResults[0];
-	misty.Debug(sensor);
+	var isPressed = data.AdditionalResults[1];
+	isPressed ? misty.Debug(sensor+" is Touched") : misty.Debug(sensor+" is Released");
+	
+	if (isPressed)
+    	{
 
-	switch(sensor) {
-		case "CapTouch_HeadFront":
-			misty.ChangeLED(0,0,255); //Blue
-			misty.ChangeDisplayImage("Happy.png");
-			misty.Set("touchTimeout", 6);
-			misty.SetHeadPosition("roll", -4.5, 100);
-			break;
-		case "CapTouch_HeadBack":
-			misty.ChangeLED(218,165,20); //Gold
-			misty.PlayAudioClip("head_amp.wav");
-			misty.ChangeDisplayImage("Wonder.png");
-			misty.Set("touchTimeout", 6);
-			misty.SetHeadPosition("roll", 4.5, 100);
-			break;
-		case "CapTouch_HeadRight":
-            misty.ChangeLED(255,255,255); //White
-			misty.PlayAudioClip("head_amp.wav");
-			misty.ChangeDisplayImage("Wonder.png");
-			misty.Set("touchTimeout", 6);
-			misty.SetHeadPosition("roll", 4.5, 100);
-			break;
-        case "CapTouch_HeadLeft":
-            misty.ChangeLED(169,169,169); //Silver
-			misty.PlayAudioClip("head_amp.wav");
-			misty.ChangeDisplayImage("Wonder.png");
-			misty.Set("touchTimeout", 6);
-			misty.SetHeadPosition("roll", 4.5, 100);
-			break;
-        case "CapTouch_Scruff":
-            misty.ChangeLED(255,0,0); //Red
-			misty.PlayAudioClip("head_amp.wav");
-			misty.ChangeDisplayImage("Wonder.png");
-			misty.Set("touchTimeout", 6);
-			misty.SetHeadPosition("roll", 4.5, 100);
-			break;
-        default:
-			misty.ChangeLED(0,255,0) //Green
-            misty.PlayAudioClip("043-Bbbaaah.wav");
-			misty.ChangeDisplayImage("Angry.png");
-			misty.Set("blinkStartTime",(new Date()).toUTCString());
-			misty.Set("timeBetweenBlink",3);
-			misty.Set("touchTimeout", 3);
+		switch(sensor) {
+			case "CapTouch_HeadFront":
+				misty.ChangeLED(0,0,255); //Blue
+				misty.ChangeDisplayImage("Happy.png");
+				misty.Set("touchTimeout", 6);
+				misty.SetHeadPosition("roll", -4.5, 100);
+				break;
+			case "CapTouch_HeadBack":
+				misty.ChangeLED(218,165,20); //Gold
+				misty.PlayAudioClip("head_amp.wav");
+				misty.ChangeDisplayImage("Wonder.png");
+				misty.Set("touchTimeout", 6);
+				misty.SetHeadPosition("roll", 4.5, 100);
+				break;
+			case "CapTouch_HeadRight":
+		   		 misty.ChangeLED(255,255,255); //White
+				misty.PlayAudioClip("head_amp.wav");
+				misty.ChangeDisplayImage("Wonder.png");
+				misty.Set("touchTimeout", 6);
+				misty.SetHeadPosition("roll", 4.5, 100);
+				break;
+			case "CapTouch_HeadLeft":
+		 	       misty.ChangeLED(169,169,169); //Silver
+				misty.PlayAudioClip("head_amp.wav");
+				misty.ChangeDisplayImage("Wonder.png");
+				misty.Set("touchTimeout", 6);
+				misty.SetHeadPosition("roll", 4.5, 100);
+				break;
+			case "CapTouch_Scruff":
+		                misty.ChangeLED(255,0,0); //Red
+				misty.PlayAudioClip("head_amp.wav");
+				misty.ChangeDisplayImage("Wonder.png");
+				misty.Set("touchTimeout", 6);
+				misty.SetHeadPosition("roll", 4.5, 100);
+				break;
+			default:
+				misty.ChangeLED(0,255,0) //Green
+			        misty.PlayAudioClip("043-Bbbaaah.wav");
+				misty.ChangeDisplayImage("Angry.png");
+				misty.Set("blinkStartTime",(new Date()).toUTCString());
+				misty.Set("timeBetweenBlink",3);
+				misty.Set("touchTimeout", 3);
 		}
+	}
 }
 
 //--------------------------------------Bump Sensor----------------------------------------------------------------
