@@ -28,42 +28,42 @@ function _Touched(data) {
 		switch(sensor) {
 			case "CapTouch_HeadFront":
 				misty.ChangeLED(0,0,255); //Blue
-				misty.ChangeDisplayImage("Happy.png");
+				misty.DisplayImage("Happy.png");
 				misty.Set("touchTimeout", 6);
-				misty.SetHeadPosition("roll", -4.5, 100);
+				misty.MoveHeadPosition(null, -4.5,null);
 				break;
 			case "CapTouch_HeadBack":
 				misty.ChangeLED(218,165,20); //Gold
-				misty.PlayAudioClip("head_amp.wav");
-				misty.ChangeDisplayImage("Wonder.png");
+				misty.PlayAudio("head_amp.wav");
+				misty.DisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
-				misty.SetHeadPosition("roll", 4.5, 100);
+				misty.MoveHeadPosition(null, 4.5,null);
 				break;
 			case "CapTouch_HeadRight":
 		   		misty.ChangeLED(255,255,255); //White
-				misty.PlayAudioClip("head_amp.wav");
-				misty.ChangeDisplayImage("Wonder.png");
+				misty.PlayAudio("head_amp.wav");
+				misty.DisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
-				misty.SetHeadPosition("roll", 4.5, 100);
+				misty.MoveHeadPosition(null, 4.5,null);
 				break;
 			case "CapTouch_HeadLeft":
 		 	    misty.ChangeLED(169,169,169); //Silver
-				misty.PlayAudioClip("head_amp.wav");
-				misty.ChangeDisplayImage("Wonder.png");
+				misty.PlayAudio("head_amp.wav");
+				misty.DisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
-				misty.SetHeadPosition("roll", 4.5, 100);
+				misty.MoveHeadPosition(null, 4.5,null);
 				break;
 			case "CapTouch_Scruff":
 		        misty.ChangeLED(255,0,0); //Red
-				misty.PlayAudioClip("head_amp.wav");
-				misty.ChangeDisplayImage("Wonder.png");
+				misty.PlayAudio("head_amp.wav");
+				misty.DisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
-				misty.SetHeadPosition("roll", 4.5, 100);
+				misty.MoveHeadPosition(null, 4.5,null);
 				break;
 			default:
 				misty.ChangeLED(0,255,0) //Green
-			    misty.PlayAudioClip("043-Bbbaaah.wav");
-				misty.ChangeDisplayImage("Angry.png");
+			    misty.PlayAudio("043-Bbbaaah.wav");
+				misty.DisplayImage("Angry.png");
 				misty.Set("blinkStartTime",(new Date()).toUTCString());
 				misty.Set("timeBetweenBlink",3);
 				misty.Set("touchTimeout", 3);
