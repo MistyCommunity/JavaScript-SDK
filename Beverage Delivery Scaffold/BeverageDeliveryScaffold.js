@@ -40,21 +40,21 @@ function _Touched(data) {
 				misty.SetHeadPosition("roll", 4.5, 100);
 				break;
 			case "CapTouch_HeadRight":
-		   		 misty.ChangeLED(255,255,255); //White
+		   		misty.ChangeLED(255,255,255); //White
 				misty.PlayAudioClip("head_amp.wav");
 				misty.ChangeDisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
 				misty.SetHeadPosition("roll", 4.5, 100);
 				break;
 			case "CapTouch_HeadLeft":
-		 	       misty.ChangeLED(169,169,169); //Silver
+		 	    misty.ChangeLED(169,169,169); //Silver
 				misty.PlayAudioClip("head_amp.wav");
 				misty.ChangeDisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
 				misty.SetHeadPosition("roll", 4.5, 100);
 				break;
 			case "CapTouch_Scruff":
-		                misty.ChangeLED(255,0,0); //Red
+		        misty.ChangeLED(255,0,0); //Red
 				misty.PlayAudioClip("head_amp.wav");
 				misty.ChangeDisplayImage("Wonder.png");
 				misty.Set("touchTimeout", 6);
@@ -62,7 +62,7 @@ function _Touched(data) {
 				break;
 			default:
 				misty.ChangeLED(0,255,0) //Green
-			        misty.PlayAudioClip("043-Bbbaaah.wav");
+			    misty.PlayAudioClip("043-Bbbaaah.wav");
 				misty.ChangeDisplayImage("Angry.png");
 				misty.Set("blinkStartTime",(new Date()).toUTCString());
 				misty.Set("timeBetweenBlink",3);
