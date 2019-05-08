@@ -1,0 +1,16 @@
+{
+	"Name": "BeverageDeliveryScaffold",
+	"UniqueId" : "423ade9d-5df1-4d5d-a82e-736870459503",
+	"Description": "My skill is amazing!",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "verbose",
+	"TimeoutInSeconds": 300,
+	"CleanupOnCancel": false,
+	"WriteToLog": false,
+	"Parameters": {
+		"int":10,
+		"double":20.5,
+		"string":"twenty"
+	}
+}
