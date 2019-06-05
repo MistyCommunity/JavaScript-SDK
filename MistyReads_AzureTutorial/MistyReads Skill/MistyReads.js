@@ -1,36 +1,50 @@
-misty.Debug("Announce Know Person Skill");
+misty.Debug("Starting Misty Reads Skill");
+misty.Set("azureURL","<Put Azure Endpoint Here>");
 
-misty.RegisterEvent("FaceRecognition", "ComputerVision", 250);
-misty.StartFaceRecognition();
+// Register Touch Event
+misty.AddReturnProperty("Touched", "sensorName");
+misty.RegisterEvent("Touched", "TouchSensor", 250 ,true);
 
-function _FaceRecognition(data) {
-    misty.Debug("Face Recognition Event Triggered");
-    
-    // Play an audio clip
-    misty.PlayAudioClip("005-OoAhhh.wav");
+// Touched Event
+function _Touched(data) {
+	misty.UnregisterEvent("Touched");
 
-    // Change LED to white
-    misty.ChangeLED(255, 255, 255);
-    // Stop face detection
-    misty.StopFaceRecognition();
+	var sensor = data.AdditionalResults[0];
+	misty.Debug(sensor);
 
-    // Use this to help debug issues!
-    // misty.Debug(JSON.stringify(data));
-	var name = data.PropertyTestResults[0].PropertyParent.PersonName;
+	switch(sensor) {
+		// use the following case statements to aid in debugging or variable time between pictures!
+		//
+		// case "CapTouch_HeadFront":
+		// 	misty.ChangeLED(0,0,255);
+		// 	break;
+		// case "CapTouch_HeadBack":
+		// 	misty.ChangeLED(0,255,0);
+		// 	break;
+		default:
+			misty.ChangeLED(255,0,0);
+			misty.Pause(2000);
+			misty.TakePicture(false, "newImage", 1200, 1600, false, true);
+	}
+}
 
-	misty.Debug("I recognize: " + name);
+function _TakePicture(data){
+    misty.Debug("Picture Taken, Sending image to Cognitive Services");
+	let baseImage = data.Result.Base64.replace(/^data:image\/[a-z]+;base64,/, "");
 
-    misty.ChangeDisplayImage("Wonder.png");
+	let azureURL = misty.Get("azureURL")
 
-    let azureURL = "<Put Azure Endpoint Here>"
-    misty.SendExternalRequest("GET", azureURL + "?message=Hi there " + name + "\"", null, null, "text/plain", "{}");
+	misty.SendExternalRequest("POST", azureURL, null, null, "application/octet-stream", base64ToByteArrayString(baseImage));
 
-    misty.Pause(4000)
-};
+	misty.Pause(4000);
+
+	//Make misty respond to touch events again. 
+	misty.RegisterEvent("Touched", "TouchSensor", 250 ,true);
+}
 
 function _SendExternalRequest(data) {
-	misty.Debug("Response Received");
-    // misty.ChangeDisplayImage("Happy.png");
+	misty.Debug("Response recieved from Cognitive Services");
+    misty.ChangeDisplayImage("Happy.png");
 
 	if (data !== undefined && data !== null) {
         misty.Debug("Got Base64 string");

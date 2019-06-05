@@ -1,4 +1,5 @@
 misty.Debug("Announce Know Person Skill");
+misty.Set("azureURL","<Put Azure Endpoint Here>");
 
 misty.RegisterEvent("FaceRecognition", "ComputerVision", 250);
 misty.StartFaceRecognition();
@@ -10,19 +11,19 @@ function _FaceRecognition(data) {
     misty.PlayAudioClip("005-OoAhhh.wav");
 
     // Change LED to white
-    misty.ChangeLED(255, 255, 255);
+	misty.ChangeLED(255, 255, 255);
+	
     // Stop face detection
     misty.StopFaceRecognition();
 
     // Use this to help debug issues!
     // misty.Debug(JSON.stringify(data));
 	var name = data.PropertyTestResults[0].PropertyParent.PersonName;
-
 	misty.Debug("I recognize: " + name);
 
     misty.ChangeDisplayImage("Wonder.png");
 
-    let azureURL = "<Put Azure Endpoint Here>"
+    let azureURL = misty.Get("azureURL");
     misty.SendExternalRequest("GET", azureURL + "?message=Hi there " + name + "\"", null, null, "text/plain", "{}");
 
     misty.Pause(4000)
@@ -30,16 +31,15 @@ function _FaceRecognition(data) {
 
 function _SendExternalRequest(data) {
 	misty.Debug("Response Received");
-    // misty.ChangeDisplayImage("Happy.png");
 
 	if (data !== undefined && data !== null) {
-        misty.Debug("Got Base64 string");
+        misty.Debug("Recieved Response from Azure");
         misty.SaveAudioAssetToRobot("AzureResponse.wav", base64ToByteArrayString(data.Result.ResponseObject.Data), true, true);
         misty.Pause(7000);
         misty.PlayAudioClip("AzureResponse.wav");
 	}
 	else {
-		misty.Debug("Empty user callback data");
+		misty.Debug("ERROR: Empty user callback data");
 	}
 	misty.Pause(3000);
     misty.ChangeLED(0, 0, 0);
@@ -47,7 +47,7 @@ function _SendExternalRequest(data) {
 }
 
 function base64ToByteArrayString(input) {
-    misty.Debug("Converting String");
+    misty.Debug("Converting base64 String");
 	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 	var Base64 = {
 		btoa: (input) => {
@@ -98,7 +98,7 @@ function base64ToByteArrayString(input) {
 		}
 		return bytes.toString();
 	} catch (e) {
-		misty.Debug("Couldn't convert to byte array: " + e);
+		misty.Debug("ERROR: Couldn't convert string to byte array: " + e);
 		return undefined;
 	}
 }

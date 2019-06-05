@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const fs = require('fs');
-const subscriptionKey = "<Put Subscription Key Here>";
+const SpeechSubscriptionKey = "<Put Subscription Key Here>";
+const VisionSubscriptionKey = "<Put Vision Subscription Key Here>";
 
 // Gets an access token.
 function getAccessToken() {
@@ -8,7 +9,7 @@ function getAccessToken() {
         method: 'POST',
         uri: 'https://westus.api.cognitive.microsoft.com/sts/v1.0/issueToken', // Be sure this base URL matches your region
         headers: {
-            'Ocp-Apim-Subscription-Key': subscriptionKey
+            'Ocp-Apim-Subscription-Key': SpeechSubscriptionKey
         }
     }
     return rp(options);
@@ -68,7 +69,7 @@ function extractText(imageData, context) {
         method: 'POST',
         uri: 'https://westus.api.cognitive.microsoft.com/vision/v2.0/read/core/asyncBatchAnalyze', // Be sure this base URL matches your region
         headers: {
-            'Ocp-Apim-Subscription-Key': subscription_key,
+            'Ocp-Apim-Subscription-Key': VisionSubscriptionKey,
             'Content-Type': 'application/octet-stream'
         },
         params: {
@@ -140,10 +141,20 @@ module.exports = async function (context, req) {
     context.log('Misty Reads Azure Function Initialized.');
     
     //Make sure you set your subscription key at the top of this file!
-    if (!subscriptionKey) {
+    if (VisionSubscriptionKey == "<Put Subscription Key Here>") {
         context.res = {
             status: 400,
-            body: "Error With Service Token"
+            body: "Error With Vision Service Token"
+        };
+        
+        context.done();
+        return;
+    };
+
+    if (SpeechSubscriptionKey == "<Put Subscription Key Here>") {
+        context.res = {
+            status: 400,
+            body: "Error With Speech Token"
         };
         
         context.done();
@@ -159,7 +170,7 @@ module.exports = async function (context, req) {
     else {
         context.res = {
             status: 400,
-            body: "Please image data in request body"
+            body: "Please put image data in request body"
         };
         context.done();
         return;
