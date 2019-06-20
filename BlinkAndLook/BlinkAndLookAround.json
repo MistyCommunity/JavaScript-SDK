@@ -1,0 +1,11 @@
+{
+	"Name": "BlinkAndLookAround",
+	"UniqueId" : "af7c75ec-5389-46ae-a5fc-1479a989c2b0",
+	"Description": "Misty Blinks and Look around",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "debug",
+	"TimeoutInSeconds": 36000,
+	"CleanupOnCancel": true,
+	"WriteToLog": false
+}
