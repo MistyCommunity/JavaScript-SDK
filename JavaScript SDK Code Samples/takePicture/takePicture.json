@@ -1,0 +1,19 @@
+{
+    "Name": "takePicture",
+    "UniqueId": "b48b41e2-a87d-42f7-a8fc-d69e7d69cadb",
+    "Description": "Misty takes a picture and shows it on her display!",
+    "StartupRules": [
+      "Manual",
+      "Robot"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "debug",
+    "TimeoutInSeconds": 36000,
+    "CleanupOnCancel": false,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }
