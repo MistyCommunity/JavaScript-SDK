@@ -104,7 +104,7 @@ function _FaceRec(data) {
     // Tells Misty how to react when she sees you. Replace
     // "<Your-Name>" below with the label you have trained Misty to
     // associate with your face.
-    else if (faceDetected == "Johnathan") {
+    else if (faceDetected == "<Your-Name>") {
         misty.ChangeLED(148, 0, 211); // Changes LED to purple
         misty.DisplayImage("e_Joy.jpg"); // Shows happy eyes
         misty.MoveArmDegrees("both", -80, 10); // Raises both arms

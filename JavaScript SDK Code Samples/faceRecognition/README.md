@@ -2,7 +2,7 @@
 
 This sample shows how to code Misty to recognize faces she detects in her field of view. She reacts differently when she detects a known face vs. when she detects an unknown face.
 
-In this sample, we use the misty.RegisterEvent() method from Misty's JavaScript API to register for face recognition (FaceRecognition) event messages. Data from FaceRecognition event messages gets passed into a callback function where we write the code that defines how the robot should respond.
+In this sample, we use the `misty.RegisterEvent()` method from Misty's JavaScript API to register for face recognition (`FaceRecognition`) event messages. Data from `FaceRecognition` event messages gets passed into a callback function where we write the code that defines how the robot should respond.
 
 In this case, when Misty sees an unknown person, she raises her arms, changes her LED to red, and raises an eyebrow. When she sees you, she changes her LED to purple, raises her arms, and shows her happy eyes.
 

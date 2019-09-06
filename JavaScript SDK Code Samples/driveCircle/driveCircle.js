@@ -47,7 +47,7 @@ misty.Pause(4000);
 function circleDrive() {
 
     for (var i = 1; i <= 4; i++) {
-        misty.DriveArc(i*90, 0.2, 3000, false);
+        misty.DriveArc(i*90, 0.5, 3000, false);
         misty.Pause(2900);
     };
 

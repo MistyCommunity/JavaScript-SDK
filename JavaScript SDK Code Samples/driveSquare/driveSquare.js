@@ -52,14 +52,14 @@ function squareDrive() {
     var i;
     for (i = 0; i < 360; i+=90) {
         // Drives the length of one side of the square
-        misty.DriveHeading(i, 0.5, 3000, false);
+        misty.DriveHeading(i, 0.2, 3000, false);
         // Pauses execution to prevent other commands from overriding
         // the misty.driveHeading() method. Adjust this timing to have
         // Misty drive without stopping
         misty.Pause(3500);
         // Turns Misty in a 90 degree arc before driving the next length
         // of the square.
-        misty.DriveArc(i+90, 0.5, 3000, false);
+        misty.DriveArc(i+90, 0.0, 3000, false);
         // Pauses execution to prevent other commands from overriding
         // the misty.driveArc() method. Adjust this timing to have
         // Misty drive without stopping
@@ -71,8 +71,5 @@ function squareDrive() {
     // Misty should only drive in one full square.
     squareDrive();
 }
-
-
-
 
 squareDrive();

@@ -27,13 +27,13 @@ Misty platform. If you already know your way around, feel free to
 ignore them!
 **********************************************************************/
 
-// Misty plays her camera shutter sound at 100% of max volume. (This
-// sound is one of Misty's default system audio files.)
+// Plays Misty's her camera shutter sound at 100% of max volume. This
+// sound is one of Misty's default system audio files.
 misty.PlayAudio("s_SystemCameraShutter.wav", 100);
 
-// Misty takes a picture and saves it with the name "photoSaveTest".
-// She sets the width of the picture to 375 and the height to 812. The
+// Takes a picture and saves it with the name "photoSaveTest".
+// Sets the width of the picture to 375 and the height to 812. The
 // first boolean argument tells Misty to save the picture, and the
 // second tells Misty to show the picture on her display as soon as
 // it's been saved to her local storage.
-misty.TakePicture("photoSaveTest", 375, 812, true, true);
+misty.TakePicture("photoSaveTest.jpg", 375, 812, true, true);

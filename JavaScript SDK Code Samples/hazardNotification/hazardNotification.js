@@ -41,14 +41,14 @@ ignore them!
 // Changes LED to white
 misty.ChangeLED(255, 255, 255);
 
-// Tells the system to print the value of the DriveStopped property in
-// the AdditionalResults array that comes back with "Hazard" event
-// messages. This value tells us which hazard state an event message is
-// associated with. This sample only uses data from the DriveStopped
-// hazard state; however, you could add additional return properties of
-// HazardNotification event messages to programmatically respond to
-// other types of hazard states.
-misty.AddReturnProperty("Hazard", "DriveStopped");
+// Tells the system to print the value of the BumpSensorsHazardState
+// property in the AdditionalResults array that comes back with
+// "Hazard" event messages. This value tells us which hazard state
+// an event message is associated with. This sample only uses data
+// from the bump sensor hazard states; however, you could add
+// additional return properties of HazardNotification event messages
+// to programmatically respond to other types of hazard states.
+misty.AddReturnProperty("Hazard", "BumpSensorsHazardState");
 
 // Registers a new event listener for HazardNotification events. (We
 // call this event listener Hazard, but you can use any name you like.
@@ -81,7 +81,7 @@ function _Hazard(data) {
     misty.Debug(JSON.stringify(data.AdditionalResults));
     const dataIn = data.AdditionalResults;
 
-    // Loops through the dataIn array to check which DriveStopped
+    // Loops through the dataIn array to check which bump sensor
     // hazards are in a hazards state, and stores the SensorNames of
     // those hazards in the triggers array.
     var triggers = [];
@@ -92,7 +92,7 @@ function _Hazard(data) {
     });
     // Checks the length of the triggers array. If not empty, prints
     // a debug message with the contents of the triggers array. If
-    // empty, the DriveStopped hazards are in a hazards state, and we
+    // empty, no bump sensors are in a hazards state, and we
     // toggle safe to be true.
     triggers.length ? misty.Debug(triggers) : safe = true;
 
@@ -101,15 +101,3 @@ function _Hazard(data) {
     // red (it's not safe to drive).
     safe ? misty.ChangeLED(255, 255, 255) : misty.ChangeLED(255, 0, 0);
 }
-
-
-
-/*
-Tip: You can extend this sample to write a skill that has Misty
-autonomously roam her environment, programmatically changing direction
-each time she enters a hazard state. Because the DriveStopped hazards
-are each associated with a particular "region", you can check the
-contents of the triggers array to find out which "regions" are unsafe,
-and use Misty's driving commands to program her to back up and choose
-a new direction.
-*/

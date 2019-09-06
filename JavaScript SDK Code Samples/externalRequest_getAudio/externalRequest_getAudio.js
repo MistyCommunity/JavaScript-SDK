@@ -29,7 +29,7 @@ ignore them!
 // The URL of the resource to which we send our external request.
 // In this example, the resource hosted at this URL is an ominous
 // recording of a self-destruction countdown. (We promise your robot
-// won't actually self-destruct when it downloads this file!)
+// won't actually self-destruct!)
 const url = "http://www.moviesoundclips.net/download.php?id=2631&ft=wav"
 
 // Sends the request to download the audio file.
