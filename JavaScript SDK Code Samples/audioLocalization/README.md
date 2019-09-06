@@ -8,6 +8,6 @@ When Misty sends an audio localization event message, that message data gets pas
 
 You can run this code on your robot by uploading the files from this folder to Misty via the Skill Runner web tool. Alternately, refer to this code sample (or copy and paste it into your own skills) when working on similar functionality.
 
-**Tip:** This sample prints the degree of arrival speech as a debug message. You can extend this sample by adding code to find Misty's current heading (yaw value from IMU), and to calculate a new heading for Misty, so that she can turn to face the person she hears speaking.
+**Tip:** This sample prints the degree of arrival speech as a debug message. You can extend this sample by adding code to find Misty's current heading (yaw value from `IMU`), and to calculate a new heading for Misty, so that she can turn to face the person she hears speaking.
 
 **Note:** For audio localization events, the direction Misty's head is facing is her 0/360 degrees. The system calculates the degree of arrival speech relative to this position. We start this sample by positioning Misty's head to face the same direction as her body, but keep in mind that this won't always be the case.
