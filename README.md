@@ -6,7 +6,7 @@ You can use the green __Clone or download__ button to copy these files onto your
 
 When working with the JavaScript code samples in this repository, you can install the skill files on your robot by uploading them to Misty via the [Skill Runner](http://sdk.mistyrobotics.com/skill-runner/) web tool, or by using Misty's [Visual Studio Code extension](https://docs.mistyrobotics.com/tools-&-apps/plugins-&-extensions/misty-skills-extension/) for JavaScript skill development. Alternately, refer to these code samples (or copy and paste them into your own skills) when working on similar functionality in your own skill development.
 
-When working with the REST API code samples, you can run many of them by entering your own robot's IP address in the required field when you open the page in your web browser. Other samples require you to manually type your robot's IP address into the `.html` code. For a better view into the commands being sent to your robot, you can open the JavaScript console the browswer window where the code is running.
+When working with the REST API code samples, you can run many of them by entering your own robot's IP address in the required field when you open the page in your web browser. Other samples require you to manually type your robot's IP address into the `.html` code. For a better view into the commands being sent to your robot, you can open the JavaScript console in the browser window where the code is running.
 
 ## Contents
 
