@@ -99,7 +99,7 @@ function _FaceRec(data) {
     if (faceDetected == "unknown person") {
         misty.ChangeLED(255, 0, 0); // Changes LED to red
         misty.DisplayImage("e_Disgust.jpg"); // Raises eyebrows
-        misty.MoveArmDegrees("both", 70, 10); // Raises both arms
+        misty.MoveArmDegrees("both", 70, 100); // Raises both arms
     }
     // Tells Misty how to react when she sees you. Replace
     // "<Your-Name>" below with the label you have trained Misty to
@@ -107,7 +107,7 @@ function _FaceRec(data) {
     else if (faceDetected == "<Your-Name>") {
         misty.ChangeLED(148, 0, 211); // Changes LED to purple
         misty.DisplayImage("e_Joy.jpg"); // Shows happy eyes
-        misty.MoveArmDegrees("both", -80, 10); // Raises both arms
+        misty.MoveArmDegrees("both", -80, 100); // Raises both arms
     }
 
     // Registers for a timer event to invoke the _timeoutToNormal
@@ -121,8 +121,8 @@ registerFaceRec();
 // configuration.
 function _timeoutToNormal() {
     misty.Pause(100);
-    misty.MoveHeadPosition(0.1, 0.1, 0.1, 40); // Faces head forward
-    misty.MoveArmDegrees("both", 70, 10); // Lowers arms
+    misty.MoveHeadDegrees(0, 0, 0, 40); // Faces head forward
+    misty.MoveArmDegrees("both", 70, 100); // Lowers arms
     misty.ChangeLED(0, 255, 0); // Changes LED to green
     misty.DisplayImage("e_DefaultContent.jpg"); // Show default eyes
 }

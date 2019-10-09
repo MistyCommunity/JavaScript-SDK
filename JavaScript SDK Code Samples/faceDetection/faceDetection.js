@@ -79,7 +79,7 @@ function _FaceDetect(data) {
     misty.Debug(JSON.stringify(data));
     misty.ChangeLED(148, 0, 211); // Changes LED to purple
     misty.DisplayImage("e_Joy.jpg"); // Displays happy eyes
-    misty.MoveArmDegrees("both", -80, 10); // Raises both arms
+    misty.MoveArmDegrees("both", -80, 100); // Raises both arms
 
     // Registers for a timer event to invoke the _timeoutToNormal
     // callback function after 5000 milliseconds.
@@ -92,8 +92,8 @@ registerFaceDetection();
 // configuration.
 function _timeoutToNormal() {
     misty.Pause(100);
-    misty.MoveHeadPosition(0.1, 0.1, 0.1, 40); // Faces head forward
-    misty.MoveArmDegrees("both", 70, 10); // Lowers arms
+    misty.MoveHeadDegrees(0, 0, 0, 40); // Faces head forward
+    misty.MoveArmDegrees("both", 70, 100); // Lowers arms
     misty.ChangeLED(0, 255, 0); // Changes LED to green
     misty.DisplayImage("e_DefaultContent.jpg"); // Show default eyes
-}
+}p
