@@ -1,7 +1,7 @@
 {
     "Name": "externalRequest_getData",
     "UniqueId": "491858a1-a022-41e3-92ad-7535db0ecfdd",
-    "Description": "Misty gets data from the APIXU API",
+    "Description": "Misty gets data from the Weatherstack API",
     "StartupRules": [
         "Manual",
         "Robot"
@@ -12,7 +12,7 @@
     "CleanupOnCancel": false,
     "WriteToLog": false,
     "Parameters":  {
-		"key": "<your-APIXU-key>",
-        "city": "Boulder"
+		  "key": "<your-Weatherstack-key>",
+      "city": "Boulder"
 	}
   }

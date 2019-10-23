@@ -18,18 +18,18 @@ imitations under the License.
 externalRequest_getData
 
 This sample shows how to code Misty to get data from an external web
-API. In this case, Misty sends a request to the APIXU weather API,
+API. In this case, Misty sends a request to the Weatherstack API,
 and parses the response to print a message with information about the
-current weather to debug listeners.
+current weather to SkillData event listeners.
 
 This sample makes use of the params field in the JSON meta file.
-We store the APIXU API key and the name of a city in the params field
-to make it easier for other developers to update the skill with their
-own unique information. Before you run this skill, you'll need to
-replace the key and city values in the externalRequest_getData.json
-file with your own APIXU API key and the name of the city in which you
-live. You can get an APIXU key for free by signing up here:
-https://www.apixu.com/signup.aspx
+We store the Weatherstack API access key and the name of a city
+in the params field to make it easier for other developers to update
+the skill with their own unique information. Before you run this skill,
+you'll need to replace the key and city values in the
+externalRequest_getData.json file with your own Weatherstack API key
+and the name of the city in which you live. You can get a Weatherstack
+key for free by signing up here: https://weatherstack.com/signup/free
 
 We've left a lot of comments in this code for developers new to the
 Misty platform. If you already know your way around, feel free to
@@ -42,15 +42,15 @@ to remove private or sensitive information from your skill files before
 sharing them on GitHub, in the Misty Community, or elsewhere online.
 **********************************************************************/
 
-// Sends a request to the APIXU API, using parameters from the skill's
-// JSON meta file to fill out the key and city in the resource URL.
-// In your skill code, you can reference any values assigned to
+// Sends a request to the Weatherstack API, using parameters from the
+// skill's JSON meta file to fill out the key and city in the resource
+// URL. In your skill code, you can reference any values assigned to
 // properties in the params object in the skill's JSON meta file by
-// calling _params.<propertyName>. In our case, this sampe, we use
+// calling _params.<propertyName>. In our case, we use
 // _params.key and _params.city, respectively.
 misty.SendExternalRequest(
     "GET",
-    "http://api.apixu.com/v1/current.json?key="+_params.key+"&q="+_params.city
+    "http://api.weatherstack.com/current?access_key="+_params.key+"&query="+_params.city
     )
 
 /*
@@ -69,7 +69,7 @@ function _SendExternalRequest(data) {
     // the response from our external resource.
     _data = JSON.parse(data.Result.ResponseObject.Data)
     // Parses the response to get the current condition in _params.city
-    _condition = _data.current.condition.text
+    _condition = _data.current.weather_descriptions[0].toLowerCase();
     // Prints the current condition as a debug message.
     misty.Debug("Misty here! Just letting you know it's " + _condition + " in " + _params.city);
 }
