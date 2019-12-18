@@ -19,20 +19,20 @@ var subscribeMsg = {
   "Operation": "subscribe",
   "Type": "TimeOfFlight",
   "DebounceMs": 100,
-	"EventName": "CenterTimeOfFlight",
+	"EventName": "FrontCenterTimeOfFlight",
   "Message": "",
   "ReturnProperty": null,
   "EventConditions":
   {
-    "Property": "SensorPosition",
+    "Property": "SensorId",
     "Inequality": "=",
-    "Value": "Center"
+    "Value": "toffc"
   }
 };
 
 var unsubscribeMsg = {
   "Operation": "unsubscribe",
-  "EventName": "CenterTimeOfFlight",
+  "EventName": "FrontCenterTimeOfFlight",
   "Message": ""
 };
 
