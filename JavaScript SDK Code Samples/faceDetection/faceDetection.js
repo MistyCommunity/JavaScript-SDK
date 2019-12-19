@@ -96,4 +96,4 @@ function _timeoutToNormal() {
     misty.MoveArmDegrees("both", 70, 100); // Lowers arms
     misty.ChangeLED(0, 255, 0); // Changes LED to green
     misty.DisplayImage("e_DefaultContent.jpg"); // Show default eyes
-}p
+}
