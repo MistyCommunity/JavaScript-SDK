@@ -27,11 +27,6 @@ messages from the UART serial port, and we use the
 misty.AddReturnProperty() method to tell the system which SerialMessage
 property values those event messages should include.
 
-For an example of the code that runs on the microcontroller to send
-messages to Misty, see the Misty (Arduino Compatible) backpack topic
-in the developer documentation:
-https://docs.mistyrobotics.com/misty-ii/robot/misty-ii/#misty-arduino-compatible-backpack
-
 We've left a lot of comments in this code for developers new to the
 Misty platform. If you already know your way around, feel free to
 ignore them!
@@ -68,4 +63,4 @@ function _backpackMessage(data) {
 
 // Sends a message from Misty to a microcontroller connected to the
 // UART serial port on her back.
-misty.WriteSerial("Hello! This is serial RX/TX, testing from Misty!!");
+misty.WriteSerial("Hello! This is Misty sending a string to the serial interface on my back!");
