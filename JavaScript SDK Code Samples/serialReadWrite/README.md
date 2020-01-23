@@ -8,7 +8,7 @@ We use two methods from Misty's JavaScript API to register for incoming serial m
 
 ## Misty Backpack for Arduino Code
 
-The Misty Backpack for Arduino directory includes examples that show how to send data to your robot from the Misty Backpack for Arduinousing both hardware and software serial communication.
+The Misty Backpack for Arduino directory includes examples that show how to send data to your robot from the Misty Backpack for Arduino using both hardware and software serial communication.
 
 The Misty Backpack for Arduino supports hardware serial communication over pins D0 and D1. These pins are wired by default to interface with the serial port on Misty's back. 
 
