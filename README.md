@@ -11,7 +11,6 @@ When working with the REST API code samples, you can run many of them by enterin
 ## Contents
 
 * **JavaScript SDK Code Samples** - A collection of code samples for developing skills with Misty's JavaScript SDK.
-* **Arduino Getting Started** - A few samples to get you quickly up-and-running with Misty's Arduino-compatible backpack.
 * **Explore** - Misty programmatically determines where to explore and expand her map.
 * **Find Face - Do Something** - Misty plays an audio clip when she detects a face.
 * **MistyReads_AzureTutorial** - Sample code for working with Microsoft Azure Functions, Microsoft Cognitive Services, and teaching Misty to read handwritten text extracted from an image.
