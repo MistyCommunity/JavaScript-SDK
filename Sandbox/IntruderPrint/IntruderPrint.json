@@ -1,0 +1,11 @@
+{
+    "Name": "IntruderPrint",
+    "UniqueId": "3a245a13-42ea-42a1-b082-efee71f496f2",
+    "Description": "Misty looks over your desk and informs you when there is an intruder",
+    "StartupRules": ["Manual", "Robot"],
+    "Language": "javascript",
+    "BroadcastMode": "debug",
+    "TimeoutInSeconds": 36000,
+    "CleanupOnCancel": true,
+    "WriteToLog": false
+  }

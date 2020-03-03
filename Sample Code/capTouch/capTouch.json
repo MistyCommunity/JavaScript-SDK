@@ -1,0 +1,16 @@
+{
+	"Name": "capTouch",
+	"UniqueId" : "8426260c-2b6b-41e8-bd3f-2ca611a61774",
+	"Description": "Misty responds to capacitive touch sensor events",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "debug",
+	"TimeoutInSeconds": 36000,
+	"CleanupOnCancel": false,
+	"WriteToLog": false,
+	"Parameters": {
+		"int":10,
+		"double":20.5,
+		"string":"twenty"
+	}
+}

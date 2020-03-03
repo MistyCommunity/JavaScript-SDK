@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_TriggerSkill2",
+    "UniqueId": "28c7cb66-91d4-4c8f-a8af-bb667ce18099",
+    "Description": "Local 'Hello, World!' tutorial series",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": true,
+    "WriteToLog": false
+}

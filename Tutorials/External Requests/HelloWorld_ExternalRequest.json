@@ -1,0 +1,15 @@
+{
+    "Name": "HelloWorld_ExternalRequest",
+    "UniqueId": "523c7187-706e-4313-a657-0fa11d8bbdd4",
+    "Description": "Local 'Hello, World!' tutorial series.",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": false,
+    "WriteToLog": false,
+    "Parameters": {
+      "key": "<your-Weatherstack-key>",
+      "city": "Boulder"
+	}
+}

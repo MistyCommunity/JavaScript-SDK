@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_TimerEvent",
+    "UniqueId": "8a380289-2939-4e81-94d9-86d511b7a8ce",
+    "Description": "Local 'Hello, World!' tutorial series.",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": false,
+    "WriteToLog": false
+}

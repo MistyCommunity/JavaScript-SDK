@@ -1,0 +1,18 @@
+{
+    "Name": "externalRequest_getData",
+    "UniqueId": "491858a1-a022-41e3-92ad-7535db0ecfdd",
+    "Description": "Misty gets data from the Weatherstack API",
+    "StartupRules": [
+        "Manual",
+        "Robot"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 600,
+    "CleanupOnCancel": false,
+    "WriteToLog": false,
+    "Parameters":  {
+		  "key": "<your-Weatherstack-key>",
+      "city": "Boulder"
+	}
+  }

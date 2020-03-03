@@ -1,0 +1,14 @@
+{
+	"Name": "HelloWorld_TimeOfFlight",
+	"UniqueId" : "652d4346-1b17-4515-974d-ce7ff901e3a1",
+	"Description": "Time-of-flight tutorial skill",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "verbose",
+	"TimeoutInSeconds": 300,
+	"CleanupOnCancel": false,
+	"SkillStorageLifetime": "Reboot",
+	"WriteToLog": false,
+	"Parameters": {
+	}
+}

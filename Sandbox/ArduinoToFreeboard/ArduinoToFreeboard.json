@@ -1,0 +1,11 @@
+{
+	"Name": "ArduinoToFreeboard",
+	"UniqueId" : "d45e2a80-642e-4930-a820-8a010b0587c9",
+	"Description": "Misty sends data from Arduino backpack to Freeboard.io",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "debug",
+	"TimeoutInSeconds": 36000,
+	"CleanupOnCancel": true,
+	"WriteToLog": false
+}
