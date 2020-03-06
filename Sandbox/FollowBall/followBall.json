@@ -1,0 +1,11 @@
+{
+	"Name": "followBall",
+	"UniqueId" : "d26f98c6-13a3-4860-9190-e7fdb0b13d39",
+	"Description": "Misty follows a ball with Pixy",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "debug",
+	"TimeoutInSeconds": 36000,
+	"CleanupOnCancel": true,
+	"WriteToLog": false
+}

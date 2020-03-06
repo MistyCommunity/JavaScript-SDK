@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_BumpSensors",
+    "UniqueId": "c07db3af-ee28-4d1f-b3c9-fc67c1e8246c",
+    "Description": "Local 'Hello, World!' tutorial series",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": true,
+    "WriteToLog": false
+}

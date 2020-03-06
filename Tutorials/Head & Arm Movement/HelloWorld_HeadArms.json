@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_HeadArms",
+    "UniqueId": "3eb34dc8-14f6-4af3-872a-ce14f168211f",
+    "Description": "Local 'Hello, World!' tutorial series.",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": true,
+    "WriteToLog": false
+}

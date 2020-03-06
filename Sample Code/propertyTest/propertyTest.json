@@ -1,0 +1,19 @@
+{
+    "Name": "propertyTest",
+    "UniqueId": "3476ce49-5467-4e42-8668-52bad281907d",
+    "Description": "Misty filters time-of-flight event messages, and only reacts when these messages meet the requirements specified by our property tests",
+    "StartupRules": [
+      "Manual",
+      "Robot"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "debug",
+    "TimeoutInSeconds": 36000,
+    "CleanupOnCancel": false,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }

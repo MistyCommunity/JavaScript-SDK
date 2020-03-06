@@ -1,0 +1,11 @@
+{
+  "Name": "Fireman",
+  "UniqueId": "5436ef6e-d0c7-48c3-b792-2f043806006b",
+  "Description": "Misty streams data from temp and pressure sensor attached to backpack to Freeboard and turns on an alarm when she finds the temperature exceeding threashold",
+  "StartupRules": ["Manual"],
+  "Language": "javascript",
+  "BroadcastMode": "debug",
+  "TimeoutInSeconds": 36000,
+  "CleanupOnCancel": true,
+  "WriteToLog": false
+}

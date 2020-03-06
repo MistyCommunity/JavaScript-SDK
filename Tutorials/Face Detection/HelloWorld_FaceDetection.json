@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_FaceDetection",
+    "UniqueId": "63b2cac5-4674-43ce-a048-670303a339ec",
+    "Description": "Local 'Hello, World!' tutorial series.",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": false,
+    "WriteToLog": false
+}

@@ -1,0 +1,19 @@
+{
+    "Name": "audioLocalization",
+    "UniqueId": "c6bbc564-412c-4b91-8ede-31b976e9e680",
+    "Description": "Misty prints the degree of arrival speech she detects as a debug message",
+    "StartupRules": [
+      "Manual",
+      "Robot"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "debug",
+    "TimeoutInSeconds": 36000,
+    "CleanupOnCancel": true,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }

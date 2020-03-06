@@ -1,0 +1,5 @@
+# Beverage Delivery Scaffold Skill
+
+This skill is intended to get you started with a scaffold to allow your Misty to deliver drinks! The intention here is to have Misty on a bar and have her travel to specific bar positions and the scaffold has block of code where you can trigger specific actions with the bump sensors, capacitive touch, and face recognition. To load a skill onto your robot navigate to Misty's (Skill Runner)[http://skill-runner.mistyrobotics.com], connect to the robot with the IP address, and then drag the .js and .json files over the 'Install' Section. You'll get a success notification and see the name of the skill in the 'Manage' section. Then to run a skill, click the start button next to the skill name. 
+
+Be sure to check out the [On-robot API Documentation](https://docs.mistyrobotics.com/docs/reference/javascript-api/) to understand everything going on!

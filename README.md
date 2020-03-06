@@ -1,19 +1,19 @@
-# Sample Code
+# Misty II JavaScript SDK
 
-This repository contains code samples for working with Misty's REST and JavaScript APIs.
+This repository provides runnable sample code, tutorials, and sandbox projects to help you create skills with Misty's JavaScript SDK.
 
-You can use the green __Clone or download__ button to copy these files onto your local desktop. This ensures you have the **Tools** directory in the same folder as the code samples, which is required for some of the samples to run. 
+For different examples of how to use Misty's .NET SDK and REST API, see the .NET-SDK and REST-API repositories.
 
-When working with the JavaScript code samples in this repository, you can install the skill files on your robot by uploading them to Misty via the [Skill Runner](http://sdk.mistyrobotics.com/skill-runner/) web tool, or by using Misty's [Visual Studio Code extension](https://docs.mistyrobotics.com/tools-&-apps/plugins-&-extensions/misty-skills-extension/) for JavaScript skill development. Alternately, refer to these code samples (or copy and paste them into your own skills) when working on similar functionality in your own skill development.
+## Using this repository
 
-When working with the REST API code samples, you can run many of them by entering your own robot's IP address in the required field when you open the page in your web browser. Other samples require you to manually type your robot's IP address into the `.html` code. For a better view into the commands being sent to your robot, you can open the JavaScript console in the browser window where the code is running.
+Use the green __Clone or download__ button to create a local version of this repository on your desktop. The repository includes three directories:
 
-## Contents
+* **Sample Code** - Runnable examples that demonstrate how to perform different tasks with Misty's JavaScript SDK. Refer to these samples (or copy and paste the code into your own JavaScript skills) when developing skills that require similar functionality.
+* **Tutorials** - Complete, runnable skills from the written tutorials published in the Misty Robotics developer documentation.
+* **Sandbox** - A collection of skills and code samples that are not actively maintained by the Misty team. Some of these skills require external hardware or integrations with third-party services. Sandbox code may not be up-to-date with Misty's current software.
 
-* **JavaScript SDK Code Samples** - A collection of code samples for developing skills with Misty's JavaScript SDK.
-* **Explore** - Misty programmatically determines where to explore and expand her map.
-* **Find Face - Do Something** - Misty plays an audio clip when she detects a face.
-* **MistyReads_AzureTutorial** - Sample code for working with Microsoft Azure Functions, Microsoft Cognitive Services, and teaching Misty to read handwritten text extracted from an image.
-* **MistyReads_Python** - Sample code for combining Misty's REST endpoints, Python wrapper, and Microsoft Cognitive Service's Vision and Speech API's to have Misty read handwriting.
-* **RoamAndLook** - Sample JavaScript skill. On seeing a known face, Misty greets the face and smiles. On seeing an unknown face, Misty takes a picture and saves it.
-**Time of Flight** - Sample JavaScript code for retrieving information from the time of flight sensors via a WebSocket connection.
+You can run the JavaScript code samples from this repository on your own Misty II by uploading the code and meta files to Misty via the [Skill Runner](http://sdk.mistyrobotics.com/skill-runner/) web tool, or by using the [Misty JavaScript](https://docs.mistyrobotics.com/tools-&-apps/plugins-&-extensions/misty-skills-extension/) extension for Visual Studio Code. Refer to these code samples (or copy and paste them into your own skills) when working on similar functionality in your own skill development.
+
+---
+
+*Find something that doesn't work? Help us fix it by creating an issue right here in the JavaScript-SDK repository! Along with a brief description of the issue, let us know what operating system you're using and what version of Misty's software you're working with. If you can, write down the steps to reproduce the issue, and be sure to include any relevant screenshots or error messages. Sharing this information helps us discover the root cause more quickly.* 

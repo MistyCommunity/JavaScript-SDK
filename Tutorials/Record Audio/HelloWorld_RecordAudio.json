@@ -1,0 +1,11 @@
+{
+    "Name": "HelloWorld_RecordAudio",
+    "UniqueId": "2697a7f3-0cc5-4180-bb03-84bae827e751",
+    "Description": "Local 'Hello, World!' tutorial series.",
+    "StartupRules": [ "Manual", "Robot" ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 300,
+    "CleanupOnCancel": false,
+    "WriteToLog": false
+}

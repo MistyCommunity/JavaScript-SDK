@@ -1,0 +1,19 @@
+{
+  "Name": "fingerPrintScanner",
+  "UniqueId": "dab847ca-fc89-4db1-a4b1-dd2173b0e7b2",
+  "Description": "My skill is amazing!",
+  "StartupRules": [
+    "Manual",
+    "Robot"
+  ],
+  "Language": "javascript",
+  "BroadcastMode": "debug",
+  "TimeoutInSeconds": 36000,
+  "CleanupOnCancel": true,
+  "WriteToLog": false,
+  "Parameters": {
+    "int": 10,
+    "double": 20.5,
+    "string": "twenty"
+  }
+}

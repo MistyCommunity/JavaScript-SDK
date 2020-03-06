@@ -1,0 +1,19 @@
+{
+    "Name": "simpleDance",
+    "UniqueId": "d31377ef-598f-4f00-85da-62042ca63ea7",
+    "Description": "My skill is amazing!",
+    "StartupRules": [
+      "Manual",
+      "Robot"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": 600,
+    "CleanupOnCancel": true,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }

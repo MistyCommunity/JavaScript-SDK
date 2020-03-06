@@ -1,0 +1,16 @@
+{
+	"Name": "AnnounceKnownPerson",
+	"UniqueId" : "f135c629-d569-44d5-a463-cf091908c02a",
+	"Description": "My skill is amazing!",
+	"StartupRules": ["Manual", "Robot"],
+	"Language": "javascript",
+	"BroadcastMode": "verbose",
+	"TimeoutInSeconds": 300,
+	"CleanupOnCancel": false,
+	"WriteToLog": false,
+	"Parameters": {
+		"int":10,
+		"double":20.5,
+		"string":"twenty"
+	}
+}
