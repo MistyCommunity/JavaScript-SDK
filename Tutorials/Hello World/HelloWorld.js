@@ -137,9 +137,9 @@ function _registerFaceRec() {
     misty.StopFaceRecognition();
     // Starts face recognition
     misty.StartFaceRecognition();
-    // If a FaceRecognition event includes a "PersonName" property,
+    // If a FaceRecognition event includes a "Label" property,
     // then Misty invokes the _FaceRec callback function.
-    misty.AddPropertyTest("FaceRec", "PersonName", "exists", "", "string");
+    misty.AddPropertyTest("FaceRec", "Label", "exists", "", "string");
     // Registers for FaceRecognition events. Sets eventName to FaceRec,
     // debounceMs to 1000, and keepAlive to false.
     misty.RegisterEvent("FaceRec", "FaceRecognition", 1000, false);
@@ -147,15 +147,16 @@ function _registerFaceRec() {
 
 // FaceRec events invoke this callback function.
 function _FaceRec(data) {
-    // Stores the value of the detected face
+    // Stores the value of the label for the detected face
     var faceDetected = data.PropertyTestResults[0].PropertyValue;
     // Logs a debug message with the label of the detected face
     misty.Debug("Misty sees " + faceDetected);
 
     // Use the Command Center to train Misty to recognize your face.
-    // Then, replace <Your-Name> below with your own name! If Misty
-    // sees and recognizes you, she waves and looks happy.
-    if (faceDetected == "<Your-Name>") {
+    // Then, replace <FaceID> below with the label that Misty
+    // associates with your own face. If Misty sees and recognizes you,
+    // she waves and looks happy.
+    if (faceDetected == "<FaceID>") {
         misty.DisplayImage("e_Joy.jpg");
         misty.PlayAudio("s_Joy3.wav");
         waveRightArm();
