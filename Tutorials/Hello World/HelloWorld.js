@@ -42,7 +42,7 @@ function _look_around(repeat = true) {
         getRandomInt(-40, 20), // Random pitch position between -40 and 20
         getRandomInt(-30, 30), // Random roll position between -30 and 30
         getRandomInt(-40, 40), // Random yaw position between -40 and 40
-        30); // Head movement velocity. Can increase up to 100.
+        85); // Head movement velocity. Can increase up to 100.
 
         // If repeat is set to true, re-registers for the look_around
         // timer event, and Misty moves her head until the skill ends.
@@ -59,47 +59,21 @@ misty.RegisterTimerEvent("look_around", getRandomInt(5, 10) * 1000, false);
 /**********************************************************************
 Changing Misty's LED
 
-This part of Misty's Hello World tutorial teaches how to write code to
-have Misty's LED pulse purple.
+This part of Misty's Hello World tutorial teaches how to code Misty to
+pulse her LED.
 **********************************************************************/
 
-// The breathingLED timer event invokes this callback function.
-function _breathingLED() {
-    // Values used to modify the RGB intensity of Misty's chest LED.
-    // Change these to use a different starting color for the LED.
-    var red = 140 / 10.0;
-    var green = 0 / 10.0;
-    var blue = 220 / 10.0;
+// Calls TransitionLED command to pulse Misty's chest LED purple.
+// Sets RGB values for starting color to 140, 0, and 220 (purple); sets
+// RGB values for finishing color to 0, 0, and 0 (black, or LED off).
+// Sets transitionType to "Breathe", and duration to 1000ms (1 second).
+// The result is that Misty's chest LED pulses purple once every second
+// until the skill ends or is canceled.
 
-    // Incrementally DECREASES the intensity of each color in the LED
-    for (var i = 10; i >= 0; i = i - 1) {
-        misty.ChangeLED(
-            Math.floor(i * red), // red intensity
-            Math.floor(i * green), // green intensity
-            Math.floor(i * blue)); // red intensity
-        // Pause before next iteration. Increase value for slower
-        // breathing; decrease for faster breathing.
-        misty.Pause(150);
-    }
+misty.TransitionLED(140, 0, 220, 0, 0, 0, "Breathe", 1000);
 
-    // Incrementally INCREASES the intensity of each color in the LED
-    for (var i = 0; i <= 10; i = i + 1) {
-        misty.ChangeLED(
-            Math.floor(i * red), // red intensity
-            Math.floor(i * green), // green intensity
-            Math.floor(i * blue)); // blue intensity
-        // Pause before next iteration. Increase value for slower
-        // breathing; decrease for faster breathing.
-        misty.Pause(150);
-    }
-    // Re-registers for the breathingLED timer event, so Misty's LED
-    // continues breathing until the skill ends.
-    misty.RegisterTimerEvent("breathingLED", 1, false);
-}
-
-// Registers for a timer event called breathingLED, and invokes the
-// _breathingLED() callback after 1 millisecond.
-misty.RegisterTimerEvent("breathingLED", 1, false);
+// Try changing the starting and finishing RGB values, transitionType,
+// and duration to achieve different effects!
 
 /**********************************************************************
 Playing Sounds
