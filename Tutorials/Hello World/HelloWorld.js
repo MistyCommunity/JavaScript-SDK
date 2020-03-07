@@ -67,8 +67,6 @@ pulse her LED.
 // Sets RGB values for starting color to 140, 0, and 220 (purple); sets
 // RGB values for finishing color to 0, 0, and 0 (black, or LED off).
 // Sets transitionType to "Breathe", and duration to 1000ms (1 second).
-// The result is that Misty's chest LED pulses purple once every second
-// until the skill ends or is canceled.
 
 misty.TransitionLED(140, 0, 220, 0, 0, 0, "Breathe", 1000);
 
