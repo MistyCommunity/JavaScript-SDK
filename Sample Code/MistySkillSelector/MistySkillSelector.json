@@ -1,0 +1,20 @@
+{
+    "Name": "MistySkillSelector",
+    "UniqueId": "c5f1bc4e-fa13-4d42-9cb5-c36ca318ea6d",
+    "Description": "Use Misty's touch and bump sensors to view, start, and stop Misty's skills",
+    "StartupRules": [
+      "Manual",
+      "Robot",
+      "Startup"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "off",
+    "TimeoutInSeconds": 100000,
+    "CleanupOnCancel": true,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }
