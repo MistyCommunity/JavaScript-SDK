@@ -118,8 +118,8 @@ function toggleSkillMenu() {
 // MenuIndex to reflect user input. Then calls GetsRunningSkills to
 // update the IconLayer with a play icon (if the skill is stopped)
 // or a stop icon (if the skill is cancelled).
-function displaySkillName(index) {
-    var index = misty.Get("MenuIndex");
+function displaySkillName() {
+    let index = misty.Get("MenuIndex");
     let skillsArray = JSON.parse(misty.Get("InstalledSkills"));
     if (index >= skillsArray.length) {
         index = 0;
