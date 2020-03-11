@@ -1,3 +1,38 @@
+/**********************************************************************
+Copyright 2020 Misty Robotics, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+imitations under the License.
+**********************************************************************/
+
+/**********************************************************************
+MistySkillSelector
+
+This sample skill uses display layers and sensor events to create an
+interface that you can use to start and stop the skills on your robot.
+
+When it runs, you can:
+* touch Misty's chin to toggle the skill "menu"
+* touch Misty's front left/right bump sensors to "scroll" through a list
+of installed skills
+* touch Misty's rear left/right bump sensor to stop/start the selected
+skill
+
+We've left a lot of comments in this code for developers new to the
+Misty platform. If you already know your way around, feel free to
+ignore them!
+**********************************************************************/
+
+
 /**Setup**/
 
 // Sets some useful keys that we can use to track the menu state
