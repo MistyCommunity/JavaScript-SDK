@@ -42,9 +42,8 @@ function _look_around(repeat = true) {
         getRandomInt(-40, 20), // Random pitch position between -40 and 20
         getRandomInt(-30, 30), // Random roll position between -30 and 30
         getRandomInt(-40, 40), // Random yaw position \between -40 and 40
-        null,
-        1)
-        // 85); Head movement velocity. Can increase up to 100.
+        null, // Velocity. Nullable. (We use duration here, instead.)
+        1); // Head movement duration, in seconds.
 
         // If repeat is set to true, re-registers for the look_around
         // timer event, and Misty moves her head until the skill ends.
