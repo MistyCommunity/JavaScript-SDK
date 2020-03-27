@@ -57,14 +57,14 @@ misty.StartFaceRecognition();
 // Sets up our FaceRecognition event listener.
 function registerFaceRec() {
     // Creates a property test for FaceRec event messages to check
-    // whether the message has a "PersonName" value before passing
+    // whether the message has a "Label" value before passing
     // the event message into the callback. This check prevents
     // the callback from triggering on messages unrelated to face
     // detection events. (For example, the system sends a single
     // message when you successfully register for FaceRecognition
     // events, and this property test prevents that message from
     // triggering our _FaceRec() callback function).
-    misty.AddPropertyTest("FaceRec", "PersonName", "exists", "", "string");
+    misty.AddPropertyTest("FaceRec", "Label", "exists", "", "string");
     // Registers a new event listener for FaceRecognition events. (We
     // call this event listener FaceRec, but you can use any name you
     // like. Giving event listeners a custom name means you can create
@@ -88,9 +88,9 @@ call the misty.RegisterEvent() method.
 // Defines how Misty should respond to FaceRec event messages. Data
 // from each FaceRec event is passed into this callback function.
 function _FaceRec(data) {
-    // Gets the value of the PersonName property in the FaceRecognition
+    // Gets the value of the Label property in the FaceRecognition
     // event message. Because we used a property test to check for the
-    // PersonName property, the value of this property is added to the
+    // Label property, the value of this property is added to the
     // PropertyValue object in the first element of the
     // PropertyTestResults array that comes back with our callback data
     var faceDetected = data.PropertyTestResults[0].PropertyValue;

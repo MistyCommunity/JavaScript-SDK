@@ -44,14 +44,14 @@ misty.StartFaceDetection();
 // Sets up our FaceRecognition event listener.
 function registerFaceDetection() {
     // Creates a property test for FaceDetect event messages to check
-    // whether the message has a "PersonName" value before passing
+    // whether the message has a "Label" value before passing
     // the event message into the callback. This check prevents
     // the callback from triggering on messages unrelated to face
     // detection events. (For example, the system sends a single
     // message when you successfully register for FaceRecognition
     // events, and this property test prevents that message from
     // triggering our _FaceDetect() callback function).
-    misty.AddPropertyTest("FaceDetect", "PersonName", "exists", "", "string");
+    misty.AddPropertyTest("FaceDetect", "Label", "exists", "", "string");
     // Registers a new event listener for FaceRecognition events. (We
     // call this event listener FaceDetect, but you can use any name
     // you like. Giving event listeners a custom name means you can

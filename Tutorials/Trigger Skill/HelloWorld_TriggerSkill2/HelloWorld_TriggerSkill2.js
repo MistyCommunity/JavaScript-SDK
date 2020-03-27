@@ -18,9 +18,9 @@ implied.
 function _FaceRecognition(data) {
     // Signal that new skill has been triggered.
     misty.Debug("TriggerSkill part 2 has been triggered.");
-    // Store the name of the detected face
-    let personName = data.AdditionalResults[0];
-    if (personName == "unknown person") {
+    // Store the label of the detected face
+    let label = data.AdditionalResults[0];
+    if (label == "unknown person") {
         // Change LED
         misty.ChangeLED(255, 0, 0); // red
         misty.Debug("I don't know you...");
@@ -28,6 +28,6 @@ function _FaceRecognition(data) {
     else {
         // Change LED
         misty.ChangeLED(0, 255, 0); // green
-        misty.Debug("Hello there " + personName + "!");
+        misty.Debug("Hello there " + label + "!");
     }
 }

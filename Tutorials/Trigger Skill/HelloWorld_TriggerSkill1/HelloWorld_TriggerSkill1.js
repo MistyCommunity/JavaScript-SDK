@@ -14,8 +14,8 @@ implied.
 *    limitations under the License.
 */
 
-// Return only the PersonName property
-misty.AddReturnProperty("FaceRecognition", "PersonName");
+// Return only the Label property
+misty.AddReturnProperty("FaceRecognition", "Label");
 
 // Register for FaceRecognition events.
 // For the callback, pass in the GUID for
