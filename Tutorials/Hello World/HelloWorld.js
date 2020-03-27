@@ -41,8 +41,10 @@ function _look_around(repeat = true) {
     misty.MoveHeadDegrees(
         getRandomInt(-40, 20), // Random pitch position between -40 and 20
         getRandomInt(-30, 30), // Random roll position between -30 and 30
-        getRandomInt(-40, 40), // Random yaw position between -40 and 40
-        85); // Head movement velocity. Can increase up to 100.
+        getRandomInt(-40, 40), // Random yaw position \between -40 and 40
+        null,
+        1)
+        // 85); Head movement velocity. Can increase up to 100.
 
         // If repeat is set to true, re-registers for the look_around
         // timer event, and Misty moves her head until the skill ends.
@@ -95,9 +97,9 @@ home.
 **********************************************************************/
 
 misty.DriveTime(0, 30, 5000);
-misty.Pause(5000);
+misty.Pause(6000);
 misty.DriveTime(0, -30, 5000);
-misty.Pause(5000);
+misty.Pause(6000);
 misty.Stop();
 
 /**********************************************************************
@@ -146,7 +148,7 @@ function _registerFaceRec() {
 // FaceRec events invoke this callback function.
 function _FaceRec(data) {
     // Stores the value of the label for the detected face
-    var faceDetected = data.PropertyTestResults[0].PropertyValue;
+    var faceDetected = data.PropertyTestResults[0].PropertyParent.Label;
     // Logs a debug message with the label of the detected face
     misty.Debug("Misty sees " + faceDetected);
 
