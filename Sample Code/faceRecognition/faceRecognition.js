@@ -106,7 +106,7 @@ function _FaceRec(data) {
     if (faceDetected == "unknown person") {
         misty.ChangeLED(255, 0, 0); // Changes LED to red
         misty.DisplayImage("e_Disgust.jpg"); // Raises eyebrows
-        misty.MoveArmDegrees("both", 70, 100); // Raises both arms
+        misty.MoveArmDegrees("both", -80, 100); // Raises both arms
     }
     // Tells Misty how to react when she sees you. Replace
     // "<Your-Name>" below with the label you have trained Misty to

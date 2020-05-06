@@ -1,5 +1,7 @@
 # capTouch
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to code Misty to play different sounds when you touch the capacitive touch sensors on her head, neck, and chin.
 
 In this sample, we use two methods from Misty's JavaScript API to register for capacitive touch (`TouchSensor`) event messages. We use the `misty.RegisterEvent()` method to create a new event listener for messages from Misty's capacitive touch sensors, and we use the `misty.AddReturnProperty()` method to tell the system which `TouchSensor` property values those event messages should include.

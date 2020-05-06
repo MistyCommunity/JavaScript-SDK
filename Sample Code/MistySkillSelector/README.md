@@ -1,5 +1,7 @@
 # MistySkillSelector
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This skill lets you use Misty's capacitive touch and bump sensors to view, start, and stop Misty's skills. When it runs:
 
 * Touch Misty's chin to toggle the display layers that show the installed skills and their current run status.

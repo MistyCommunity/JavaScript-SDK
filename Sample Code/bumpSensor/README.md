@@ -1,5 +1,7 @@
 # bumpSensor
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to code Misty to play different sounds when you trigger the bump sensors on her base.
 
 In this sample, we use two methods from Misty's JavaScript API to register for bump sensor (`BumpSensor`) event messages. We use the `misty.RegisterEvent()` method to create a new event listener for messages from Misty's bump sensors, and we use the `misty.AddReturnProperty()` method to tell the system which `BumpSensor` property values those event messages should include.

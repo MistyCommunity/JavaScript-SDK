@@ -1,5 +1,7 @@
 # serialReadWrite
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 These samples show how to code Misty to send/receive messages to/from a microcontroller connected to the UART serial port on her back.
 
 ## Skill Code

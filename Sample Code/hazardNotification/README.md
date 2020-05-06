@@ -1,5 +1,7 @@
 # hazardNotification
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to register for hazard notification (`HazardNotification`) event messages. Once you've registered for these
 messages, you can use them to program Misty to back up and find another direction when she stops driving due to an obstacle or a cliff in her path.
 
