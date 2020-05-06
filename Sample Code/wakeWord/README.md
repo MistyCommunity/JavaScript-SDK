@@ -1,5 +1,7 @@
 # wakeWord
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to code Misty to respond when she hears the "Hey, Misty!" key phrase.
 
 When you call the `misty.StartKeyPhraseRecognition()` command, Misty listens for the key phrase by continuously sampling audio from the environment and comparing that audio to her trained key phrase model (in this case, "Hey, Misty!"). Misty does not create or save audio recordings while listening for the key phrase.

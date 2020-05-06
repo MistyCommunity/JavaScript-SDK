@@ -47,17 +47,18 @@ misty.AddPropertyTest("TOF", "DistanceInMeters", "<=", 0.20, "double");
 
 // Registers a new event listener for TimeOfFlight events. (We call
 // this event listener TOF, but you can use any name you like.)
-// Our TOF event listener has a debounce of 0 ms, and we set the
-// fourth argument (keepAlive) to false, which tells the system to keep
+// Our TOF event listener has a debounce of 0 ms, so it streams data
+// as fast as the sensors can send it, and we set the fourth argument
+// (keepAlive) to false, which tells the system to stop
 // listening for TOF events after the first message comes back.
-misty.RegisterEvent("TOF", "TimeOfFlight", 0, true);
+misty.RegisterEvent("TOF", "TimeOfFlight", 0, false);
 
 // Changes LED to purple
 misty.ChangeLED(144, 0, 230);
 
-// Defines how Misty should respond to FrontTOF events. Remember, this
-// callback function ONLY triggers when Misty detects on obstacle
-// closer than 0.20 cm.
+// Defines how Misty should respond to TOF events. This
+// callback only triggers the first time Misty detects an
+// obstacle within 0.20 cm of a range ToF sensor.
 function _TOF(data) {
     // Prints the value of the DistanceInMeters property. Event
     // messages that pass a property test are pushed to the
@@ -66,4 +67,5 @@ function _TOF(data) {
     misty.Debug(data.PropertyTestResults[0].PropertyParent.DistanceInMeters);
     misty.ChangeLED(235, 150, 50); // Changes LED to orange
     misty.PlayAudio("s_Amazement.wav"); // Plays an amazed sound
+    misty.UnregisterAllEvents(); // Unregister all event listeners
 }

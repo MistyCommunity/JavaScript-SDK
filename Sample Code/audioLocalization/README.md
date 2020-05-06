@@ -1,5 +1,7 @@
 # audioLocalization
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to code Misty to localize audio. When this code runs, Misty starts sending audio localization event messages and prints the degree of any arrival speech as a debug message.
 
 In this sample, we use two methods from Misty's JavaScript API to register for audio localization (`SourceTrackDataMessage`) events. We use the `misty.RegisterEvent()` method to create a new event listener for messages from Misty's audio localization system, and we use the `misty.AddReturnProperty()` method to tell the system which `SourceTrackDataMessage` property values those event messages should include.

@@ -1,5 +1,7 @@
 # propertyTest
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows how to code Misty to apply a property test to event listeners, so that Misty ignores messages from an event that do not meet the requirements you define in your code.
 
 You can use property tests any time you register a new event listener. In this sample, we filter messages from Misty's time-of-flight sensors, so that our event callback only triggers when the front-center sensor detects an obstacle closer than 15 cm. This event listener ignores messages that come from the other time-of-flight sensors, and it doesn't pass along data from the front center sensor unless its

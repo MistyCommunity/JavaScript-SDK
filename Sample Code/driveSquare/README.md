@@ -1,5 +1,7 @@
 # driveSquare
 
+*This example was last tested on `robotVersion 1.16.1.10505`*
+
 This sample shows one option for coding Misty to drive in a square.
 
 You can run this code on your robot by uploading the files from this folder to Misty via the Skill Runner web tool. Alternately, refer to this code sample (or copy and paste it into your own skills) when working on similar functionality.
