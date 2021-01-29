@@ -1,0 +1,20 @@
+{
+    "Name": "DisplayPAddress",
+    "UniqueId": "9a47cc1c-f22d-4705-84ab-338427868575",
+    "Description": "Touch Mistys chin to display her IP address on the screen. Touch again to hide.",
+    "StartupRules": [
+      "Manual",
+      "Robot",
+      "Startup"
+    ],
+    "Language": "javascript",
+    "BroadcastMode": "verbose",
+    "TimeoutInSeconds": -1,
+    "CleanupOnCancel": true,
+    "WriteToLog": false,
+    "Parameters": {
+      "int": 10,
+      "double": 20.5,
+      "string": "twenty"
+    }
+  }
